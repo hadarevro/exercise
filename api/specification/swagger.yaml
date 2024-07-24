@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: Shortener api
+  description: API for shortening urls
+  version: 1.0.0
+paths:
+  /urls:
+    post:
+      tags:
+        - UrlServices
+      summary: Create new shorten url
+      description: |-
+        Create a new short url for the database. The user provides a long url, and the server generates a new shorter url
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#api\schema\url'
+        required: true
+      responses:
+        "201":
+          description: "created a new short url"
+          content:
+            application/json:
+              schema:
+                $ref: '#api\schema\url'
+        "500":
+          description: "intenal server error"
+    get:
+      tags:
+        - UrlServices
+      summary: Get shorten url
+      description: "Get a short url, based on providing the long url of the same adress."
+      parameters:
+        - name: Original url
+          in: header
+          required: true
+          description: Original url of the short url the clients asked for.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "got short url"
+        "404":
+          description: "could not find url"
+        "500":
+          description: "intenal server error"
+  "/urls/starts-with/{startswith}":
+    get:
+      tags:
+        - UrlServices
+      summary: Short urls starting with
+      parameters:
+        - name: starts with
+          in: path
+          required: true
+          description: word or letter to get all short urls that start by it
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "got short url"
+        "404":
+          description: "could not find url"
+        "500":
+          description: "intenal server error"
+  "/urls/contains/{contains}":
+    get:
+      tags:
+        - UrlServices
+      summary: Short urls containing
+      parameters:
+        - name: contains
+          in: path
+          required: true
+          description: word or letter to get all short urls that contains it
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "got short url"
+        "404":
+          description: "could not find url"
+        "500":
+          description: "intenal server error"
+  "/urls/uncontains/{uncontains}":
+    get:
+      tags:
+        - UrlServices
+      summary: Short urls not containing
+      parameters:
+        - name: uncontains
+          in: path
+          required: true
+          description: word or letter to get all short urls not containig it
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "got short url"
+        "404":
+          description: "could not find url"
+        "500":
+          description: "intenal server error"
+components:
+  schemas:
+    url:
+      required:
+        - urlId
+        - originUrl
+        - shortUrl
+      type: object
+      properties:
+        urlId:
+          type: string
+          description: Unique identifier for the url.
+        originUrl:
+          type: string
+          description: Original longer url.
+        shortUrl:
+          type: string
+          description: The original url after shortening
