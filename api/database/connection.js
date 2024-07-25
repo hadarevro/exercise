@@ -27,4 +27,4 @@ const connectToDb = async () => {
   }
 };
 
-module.exports = connectToDb;
+module.exports = { connectToDb, postgreClient };
