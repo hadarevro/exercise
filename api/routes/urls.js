@@ -4,15 +4,16 @@ const swaggerUi = require("swagger-ui-express");
 const {
   getUrls,
   addUrl,
-  getShortUrlByOriginal,
+  getUrlByShorterUrl,
   modifyUrl,
+  deleteUrl,
 } = require("../services/urlServices");
 const swaggerDocument = require("./swagger.json");
 
 router.use("/api-docs", swaggerUi.serve);
 router.get("/api-docs", swaggerUi.setup(swaggerDocument));
 
-router.get("/all", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const urls = getUrls();
     if (!urls) {
@@ -36,15 +37,16 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/:short-url", async (req, res) => {
   try {
-    const url = getShortUrlByOriginal(req.body);
+    const shortUrl = req.query;
+    const url = getUrlByShorterUrl(shortUrl);
     if (!url) {
-      res.json(urls.json()).status(200);
+      res.redirect(url).status(200);
     }
     res.send("Couldn't find urls matching your request").status(404);
   } catch (error) {
-    console.error("Failed to find wanted url", error);
+    console.error("Failed to find wanted url ", error);
     res.status(500);
   }
 });
@@ -55,7 +57,18 @@ router.patch("/", async (req, res) => {
     modifyUrl(originalUrl, shortUrl);
     res.send(`Modified ${originalUrl} succesfully`).status(200);
   } catch (error) {
-    console.error("Failed to add new url to the db", error);
+    console.error("Failed to add new url to the db ", error);
+    res.status(500);
+  }
+});
+
+router.delete("/", async (req, res) => {
+  try {
+    const urlId = req.body;
+    deleteUrl(urlId);
+    res.send("Deleted url sucessfuly");
+  } catch (error) {
+    console.error("Failed to delete url ", error);
     res.status(500);
   }
 });
