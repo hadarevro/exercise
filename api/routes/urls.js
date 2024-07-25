@@ -5,6 +5,7 @@ const {
   getUrls,
   addUrl,
   getShortUrlByOriginal,
+  modifyUrl,
 } = require("../services/urlServices");
 const swaggerDocument = require("./swagger.json");
 
@@ -44,6 +45,17 @@ router.get("/", async (req, res) => {
     res.send("Couldn't find urls matching your request").status(404);
   } catch (error) {
     console.error("Failed to find wanted url", error);
+    res.status(500);
+  }
+});
+
+router.patch("/", async (req, res) => {
+  try {
+    const { originalUrl, shortUrl } = req.body;
+    modifyUrl(originalUrl, shortUrl);
+    res.send(`Modified ${originalUrl} succesfully`).status(200);
+  } catch (error) {
+    console.error("Failed to add new url to the db", error);
     res.status(500);
   }
 });
