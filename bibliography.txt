@@ -1,0 +1,16 @@
+bibliography:
+
+1. https://logrocket.com/
+2. https://sequelize.org/
+3. https://reflectoring.io/
+4. https://medium.com/
+5. https://swagger.io/tools/swagger-editor/
+6. https://github.com/conventional-changelog/commitlint?tab=readme-ov-file
+7. https://hub.docker.com/_/postgres
+8. https://www.postgresql.org/
+9. https://stackoverflow.com/
+10. https://www.youtube.com/
+11. https://developer.mozilla.org/en-US/
+12. https://www.geeksforgeeks.org/
+13. https://www.npmjs.com/
+14. https://www.w3schools.com/
