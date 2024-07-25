@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const swaggerUi = require("swagger-ui-express");
 
-const getUrls = require("../services/urlServices");
+const { getUrls, addUrl } = require("../services/urlServices");
 // const postgreClient = require("../database/connection");
 // const Url = require("../schemas/url");
 const swaggerDocument = require("./swagger.json");
@@ -9,12 +9,26 @@ const swaggerDocument = require("./swagger.json");
 router.use("/api-docs", swaggerUi.serve);
 router.get("/api-docs", swaggerUi.setup(swaggerDocument));
 
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const urls = getUrls();
-    res.json(urls.json()).status(200);
+    if (!urls) {
+      res.json(urls.json()).status(200);
+    }
+    res.send("No urls found, try adding some").status(404);
   } catch (error) {
-    console.error("failed to get all urls ", error);
-    res.send(500);
+    console.error("Failed to get all urls ", error);
+    res.status(500);
+  }
+});
+
+router.post("/", async (req, res) => {
+  const { originalUrl, shortUrl } = req.body;
+  try {
+    addUrl(originalUrl, shortUrl);
+    res.send(`Added ${originalUrl} succesfully to db`).status(201);
+  } catch (error) {
+    console.error("Failed to add new url to the db", error);
+    res.status(500);
   }
 });

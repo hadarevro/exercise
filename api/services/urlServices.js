@@ -4,4 +4,11 @@ const getUrls = () => {
   return postgreClient.query("SELECT * FROM urls");
 };
 
-module.exports = getUrls;
+const addUrl = (originalUrl, shortUrl) => {
+  postgreClient.query(
+    "INSERT INTO urls (originUrl, shortUrl) values ($1, $2) RETURNING *",
+    [originalUrl, shortUrl]
+  );
+};
+
+module.exports = { getUrls, addUrl };
