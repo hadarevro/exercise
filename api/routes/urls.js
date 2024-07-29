@@ -8,10 +8,10 @@ const {
   modifyUrl,
   deleteUrl,
 } = require("../services/urlServices");
-const swaggerDocument = require("./swagger.json");
+// const swaggerDocument = require("../specification/swagger.yaml");
 
-router.use("/api-docs", swaggerUi.serve);
-router.get("/api-docs", swaggerUi.setup(swaggerDocument));
+// router.use("/api-docs", swaggerUi.serve);
+// router.get("/api-docs", swaggerUi.setup(swaggerDocument));
 
 router.get("/", async (req, res) => {
   try {
@@ -72,3 +72,5 @@ router.delete("/", async (req, res) => {
     res.status(500);
   }
 });
+
+module.exports = router;

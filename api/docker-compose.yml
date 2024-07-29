@@ -5,9 +5,9 @@ services:
     image: postgres:latest
     container_name: example-database
     environment:
-      USER_NAME: postgres
-      DATABASE_NAME: urls
-      DATABASE_PASSWORD: mysecretpassword
+      POSTGRES_DB: example-database
+      POSTGRES_USER: example-database
+      POSTGRES_PASSWORD: mysecretpassword
     ports:
       - "5432:5432"
     networks:
@@ -20,7 +20,7 @@ services:
     container_name: pg-admin
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin_password
+      PGADMIN_DEFAULT_PASSWORD: mysecretpassword
     ports:
       - "5050:80"
     networks:

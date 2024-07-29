@@ -1,30 +1,36 @@
-const { Client } = require("pg");
+const { Sequelize } = require("sequelize");
+
+const Url = require("../models/url");
 
 require("dotenv").config();
 
-let postgreClient;
-
-const createClient = () => {
-  return new Client({
-    user: process.env.USER_NAME,
+const sequelize = new Sequelize(
+  process.env.DATABASE_NAME,
+  process.env.USER_NAME,
+  process.env.DATABASE_PASSWORD,
+  {
     host: process.env.HOST,
-    password: process.env.DATABASE_PASSWORD,
-    port: process.env.POSTGRE_SQL_PORT,
-  });
-};
+    dialect: process.env.DIALECT,
+  }
+);
 
 const connectToDb = async () => {
-  postgreClient = createClient();
   try {
-    await postgreClient.connect();
-    await client.query(`DROP DATABASE IF EXISTS ${process.env.DATABASE_NAME};`);
-    await client.query(`CREATE DATABASE ${process.env.DATABASE_NAME};`);
+    await sequelize.authenticate();
     console.log("Connected to PostgreSQL database");
-    await client.end();
   } catch (error) {
-    console.error("Connection to PostgreSQL database failed ", error);
+    console.error("Connection to PostgreSQL database failed", error);
     process.exit(1);
   }
 };
 
-module.exports = { connectToDb, postgreClient };
+const createTableByModel = async () => {
+  try {
+    Url.sync();
+    console.log("All models were synchronized successfully.");
+  } catch (error) {
+    console.error("Couldn't synchronized models", error);
+  }
+};
+
+module.exports = { connectToDb, sequelize, createTableByModel };
