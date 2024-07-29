@@ -3,17 +3,17 @@ const { sequelize } = require("../database/connection");
 
 const Url = sequelize.define("url", {
   urlId: {
+    type: Sequelize.UUID,
     primaryKey: true,
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
+    defaultValue: Sequelize.UUIDV4,
     allowNull: false,
   },
   originUrl: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false,
   },
   shortUrl: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false,
   },
 });

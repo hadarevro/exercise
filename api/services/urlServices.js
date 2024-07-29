@@ -1,39 +1,36 @@
-const postgreClient = require("../database/connection");
 const Url = require("../models/url");
 
-const getUrls = () => {
-  return Url.findAll();
+const getUrls = async () => {
+  return await Url.findAll();
 };
 
-const addUrl = (originalUrlToAdd, shortUrlToAdd) => {
-  const urlsWithShortId = Url.find({ where: { shorterUrl } });
-  if (!urlsWithShortId) {
-    return Url.create({
-      originUrl: originalUrlToAdd,
-      shortUrl: shortUrlToAdd,
-    });
-  }
-  //throw Error
+const addUrl = async (originalUrlToAdd, shortUrlToAdd) => {
+  return await Url.create({
+    originUrl: originalUrlToAdd,
+    shortUrl: shortUrlToAdd,
+  });
 };
 
-const getUrlByShorterUrl = (shorterUrl) => {
-  const originalUrl = Url.findOne({ where: { shortUrl: shorterUrl } });
-  return originalUrl.originUrl;
+const getUrlByShorterUrl = async (shorterUrl) => {
+  const originalUrl = await Url.findOne({ where: { shortUrl: shorterUrl } });
+  console.log(originalUrl);
+  return originalUrl;
 };
 
-const modifyUrl = (originalUrlToModify, shortUrlToModify) => {
-  const urlToModify = Url.find({
+const modifyUrl = async (
+  originalUrlToModify,
+  shortUrlToModify,
+  newShortUrl
+) => {
+  console.log(originalUrlToModify, shortUrlToModify, newShortUrl);
+  const urlToModify = await Url.findOne({
     where: { originUrl: originalUrlToModify, shortUrl: shortUrlToModify },
   });
-  urlToModify.originUrl;
-  postgreClient.query("UPDATE urls SET shortUrl = $1 WHERE originUrl $2", [
-    originalUrl,
-    shortUrl,
-  ]);
+  urlToModify.shortUrl = newShortUrl;
 };
 
-const deleteUrl = (urlToDelete) => {
-  Url.destroy({ where: { urlId: urlToDelete } });
+const deleteUrl = async (urlToDelete) => {
+  await Url.destroy({ where: { shortUrl: urlToDelete } });
 };
 
 module.exports = {

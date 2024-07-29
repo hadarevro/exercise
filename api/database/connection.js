@@ -1,7 +1,4 @@
 const { Sequelize } = require("sequelize");
-
-const Url = require("../models/url");
-
 require("dotenv").config();
 
 const sequelize = new Sequelize(
@@ -26,7 +23,7 @@ const connectToDb = async () => {
 
 const createTableByModel = async () => {
   try {
-    Url.sync();
+    await sequelize.sync({ force: true });
     console.log("All models were synchronized successfully.");
   } catch (error) {
     console.error("Couldn't synchronized models", error);

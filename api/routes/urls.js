@@ -15,9 +15,9 @@ const {
 
 router.get("/", async (req, res) => {
   try {
-    const urls = getUrls();
-    if (!urls) {
-      res.json(urls.json()).status(200);
+    const urls = await getUrls();
+    if (urls) {
+      return res.send(urls).status(200);
     }
     res.send("No urls found, try adding some").status(404);
   } catch (error) {
@@ -27,22 +27,24 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { originalUrl, shortUrl } = req.body;
+  const { originUrl, shortUrl } = req.body;
+  console.log(originUrl);
   try {
-    addUrl(originalUrl, shortUrl);
-    res.send(`Added ${originalUrl} succesfully to db`).status(201);
+    await addUrl(originUrl, shortUrl);
+    res.send(`Added ${originUrl} succesfully to db`).status(201);
   } catch (error) {
     console.error("Failed to add new url to the db", error);
     res.status(500);
   }
 });
-
-router.get("/:short-url", async (req, res) => {
+``;
+router.get("/:shortUrl", async (req, res) => {
   try {
-    const shortUrl = req.query;
-    const url = getUrlByShorterUrl(shortUrl);
-    if (!url) {
-      res.redirect(url).status(200);
+    const { shortUrl } = req.params;
+    const url = await getUrlByShorterUrl(shortUrl);
+    if (url) {
+      console.log(url.originUrl);
+      res.redirect(url.originUrl).status(200);
     }
     res.send("Couldn't find urls matching your request").status(404);
   } catch (error) {
@@ -53,19 +55,20 @@ router.get("/:short-url", async (req, res) => {
 
 router.patch("/", async (req, res) => {
   try {
-    const { originalUrl, shortUrl } = req.body;
-    modifyUrl(originalUrl, shortUrl);
-    res.send(`Modified ${originalUrl} succesfully`).status(200);
+    const { originUrl, shortUrl, newShortUrl } = req.body;
+    await modifyUrl(originUrl, shortUrl, newShortUrl);
+    res.send(`Modified ${originUrl} succesfully`).status(200);
   } catch (error) {
-    console.error("Failed to add new url to the db ", error);
+    console.error("Failed to to modify url", error);
     res.status(500);
   }
 });
 
 router.delete("/", async (req, res) => {
   try {
-    const urlId = req.body;
-    deleteUrl(urlId);
+    const shortUrl = req.body.shortUrl;
+    console.log("shortttttttttt", shortUrl);
+    await deleteUrl(shortUrl);
     res.send("Deleted url sucessfuly");
   } catch (error) {
     console.error("Failed to delete url ", error);
