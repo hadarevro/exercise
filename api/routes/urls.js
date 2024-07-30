@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const swaggerUi = require("swagger-ui-express");
 
 const {
   getUrls,
@@ -8,10 +7,6 @@ const {
   modifyUrl,
   deleteUrl,
 } = require("../services/urlServices");
-// const swaggerDocument = require("../specification/swagger.yaml");
-
-// router.use("/api-docs", swaggerUi.serve);
-// router.get("/api-docs", swaggerUi.setup(swaggerDocument));
 
 router.get("/", async (req, res) => {
   try {

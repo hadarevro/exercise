@@ -1,0 +1,183 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Shortener api",
+    "description": "API for shortening urls",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/urls": {
+      "post": {
+        "tags": [
+          "UrlServices"
+        ],
+        "summary": "Create new shorten url",
+        "description": "Create a new short url for the database. The user provides a long url, and the server generates a new shorter url",
+        "parameters": [
+          {
+            "name": "original url",
+            "in": "header",
+            "required": true,
+            "description": "Original long url to shorten",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "shortUrl",
+            "required": true,
+            "in": "header",
+            "description": "Short url",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "created a new short url"
+          },
+          "500": {
+            "description": "intenal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "UrlServices"
+        ],
+        "summary": "Get shorten url",
+        "description": "Get a short url, based on providing the long url of the same adress.",
+        "parameters": [
+          {
+            "name": "Original url",
+            "in": "header",
+            "required": true,
+            "description": "Original url of the short url the clients asked for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "got short url"
+          },
+          "404": {
+            "description": "could not find url"
+          },
+          "500": {
+            "description": "intenal server error"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "UrlServices"
+        ],
+        "summary": "Update short url",
+        "parameters": [
+          {
+            "name": "original url",
+            "in": "header",
+            "required": true,
+            "description": "Original long url to modify it's shortened url",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "shortUrl",
+            "required": true,
+            "in": "header",
+            "description": "Short url",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "modified url"
+          },
+          "304": {
+            "description": "modification failed"
+          },
+          "400": {
+            "description": "bad request"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "UrlServices"
+        ],
+        "summary": "Delete url",
+        "parameters": [
+          {
+            "name": "url id",
+            "in": "query",
+            "required": true,
+            "description": "Delete a short url based on providing the id of the same adress",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "deleted url"
+          },
+          "400": {
+            "description": "bad request"
+          }
+        }
+      }
+    },
+    "/urls/all": {
+      "get": {
+        "tags": [
+          "UrlServices"
+        ],
+        "summary": "Get all short urls",
+        "responses": {
+          "200": {
+            "description": "got short url"
+          },
+          "404": {
+            "description": "could not find url"
+          },
+          "500": {
+            "description": "intenal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "url": {
+        "required": [
+          "urlId",
+          "originUrl",
+          "shortUrl"
+        ],
+        "type": "object",
+        "properties": {
+          "urlId": {
+            "type": "string",
+            "description": "Unique identifier for the url."
+          },
+          "originUrl": {
+            "type": "string",
+            "description": "Origina  l longer url."
+          },
+          "shortUrl": {
+            "type": "string",
+            "description": "The original url after shortening"
+          }
+        }
+      }
+    }
+  }
+}
