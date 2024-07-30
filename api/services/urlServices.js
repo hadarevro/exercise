@@ -13,7 +13,6 @@ const addUrl = async (originalUrlToAdd, shortUrlToAdd) => {
 
 const getUrlByShorterUrl = async (shorterUrl) => {
   const originalUrl = await Url.findOne({ where: { shortUrl: shorterUrl } });
-  console.log(originalUrl);
   return originalUrl;
 };
 
