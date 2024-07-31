@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
     }
     res.send("No urls found, try adding some").status(404);
   } catch (error) {
-    console.error("Failed to get all urls ", error);
+    console.error("Failed to get all urls", error);
     res.status(500);
   }
 });
@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     res.status(500);
   }
 });
-``;
+
 router.get("/:shortUrl", async (req, res) => {
   try {
     const { shortUrl } = req.params;
@@ -62,7 +62,6 @@ router.patch("/", async (req, res) => {
 router.delete("/", async (req, res) => {
   try {
     const shortUrl = req.body.shortUrl;
-    console.log("shortttttttttt", shortUrl);
     await deleteUrl(shortUrl);
     res.send("Deleted url sucessfuly");
   } catch (error) {

@@ -17,7 +17,6 @@ const connectToDb = async () => {
     console.log("Connected to PostgreSQL database");
   } catch (error) {
     console.error("Connection to PostgreSQL database failed", error);
-    process.exit(1);
   }
 };
 
