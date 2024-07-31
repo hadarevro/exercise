@@ -25,7 +25,11 @@ const modifyUrl = async (
   const urlToModify = await Url.findOne({
     where: { originUrl: originalUrlToModify, shortUrl: shortUrlToModify },
   });
-  urlToModify.shortUrl = newShortUrl;
+  if (!urlToModify) {
+    urlToModify.shortUrl = newShortUrl;
+    return true;
+  }
+  return false;
 };
 
 const deleteUrl = async (urlToDelete) => {

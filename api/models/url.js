@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const { sequelize } = require("../database/connection");
 
-const Url = sequelize.define("url", {
+const Url = sequelize.define("urlsTable", {
   urlId: {
     type: Sequelize.UUID,
     primaryKey: true,

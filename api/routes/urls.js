@@ -51,8 +51,10 @@ router.get("/:shortUrl", async (req, res) => {
 router.patch("/", async (req, res) => {
   try {
     const { originUrl, shortUrl, newShortUrl } = req.body;
-    await modifyUrl(originUrl, shortUrl, newShortUrl);
-    res.send(`Modified ${originUrl} succesfully`).status(200);
+    if (await modifyUrl(originUrl, shortUrl, newShortUrl)) {
+      res.send(`Modified ${originUrl} succesfully`).status(200);
+    }
+    res.send("Can't find original url or the shorter one").status(404);
   } catch (error) {
     console.error("Failed to to modify url", error);
     res.status(500);
