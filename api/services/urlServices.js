@@ -5,10 +5,14 @@ const getUrls = async () => {
 };
 
 const addUrl = async (originalUrlToAdd, shortUrlToAdd) => {
-  return await Url.create({
-    originUrl: originalUrlToAdd,
-    shortUrl: shortUrlToAdd,
-  });
+  const urls = await Url.findOne({ where: { shortUrl: shortUrlToAdd } });
+  if (!urls) {
+    return await Url.create({
+      originUrl: originalUrlToAdd,
+      shortUrl: shortUrlToAdd,
+    });
+  }
+  return;
 };
 
 const getUrlByShorterUrl = async (shorterUrl) => {
@@ -19,14 +23,14 @@ const getUrlByShorterUrl = async (shorterUrl) => {
 const modifyUrl = async (
   originalUrlToModify,
   shortUrlToModify,
-  newShortUrl
+  newOriginUrl
 ) => {
-  console.log(originalUrlToModify, shortUrlToModify, newShortUrl);
   const urlToModify = await Url.findOne({
     where: { originUrl: originalUrlToModify, shortUrl: shortUrlToModify },
   });
-  if (!urlToModify) {
-    urlToModify.shortUrl = newShortUrl;
+  if (urlToModify) {
+    urlToModify.originUrl = newOriginUrl;
+    await urlToModify.save();
     return true;
   }
   return false;

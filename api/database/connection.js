@@ -22,7 +22,7 @@ const connectToDb = async () => {
 
 const createTableByModel = async () => {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync();
     console.log("All models were synchronized successfully.");
   } catch (error) {
     console.error("Couldn't synchronized models", error);

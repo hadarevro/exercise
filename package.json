@@ -4,7 +4,7 @@
   "description": "",
   "main": "api/index.js",
   "scripts": {
-    "dev": "node api/index.js",
+    "dev": "node index.js",
     "test": "mocha --experimental-modules api/tests/url.test.js"
   },
   "keywords": [],

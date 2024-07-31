@@ -23,10 +23,11 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { originUrl, shortUrl } = req.body;
-  console.log(originUrl);
   try {
-    await addUrl(originUrl, shortUrl);
-    res.send(`Added ${originUrl} succesfully to db`).status(201);
+    if (await addUrl(originUrl, shortUrl)) {
+      return res.send(`Added ${originUrl} succesfully to db`).status(201);
+    }
+    res.send("Short url already exists").status(409);
   } catch (error) {
     console.error("Failed to add new url to the db", error);
     res.status(500);
@@ -50,9 +51,11 @@ router.get("/:shortUrl", async (req, res) => {
 
 router.patch("/", async (req, res) => {
   try {
-    const { originUrl, shortUrl, newShortUrl } = req.body;
-    if (await modifyUrl(originUrl, shortUrl, newShortUrl)) {
-      res.send(`Modified ${originUrl} succesfully`).status(200);
+    const { originUrl, shortUrl, newOriginUrl } = req.body;
+    if (await modifyUrl(originUrl, shortUrl, newOriginUrl)) {
+      res
+        .send(`Modified ${originUrl} to ${newOriginUrl} succesfully`)
+        .status(200);
     }
     res.send("Can't find original url or the shorter one").status(404);
   } catch (error) {
