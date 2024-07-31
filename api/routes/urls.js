@@ -57,7 +57,7 @@ router.patch("/", async (req, res) => {
         .send(`Modified ${originUrl} to ${newOriginUrl} succesfully`)
         .status(200);
     }
-    res.send("Can't find original url or the shorter one").status(404);
+    res.send("Can't find original url or the shortned one").status(404);
   } catch (error) {
     console.error("Failed to to modify url", error);
     res.status(500);
@@ -67,8 +67,10 @@ router.patch("/", async (req, res) => {
 router.delete("/", async (req, res) => {
   try {
     const shortUrl = req.body.shortUrl;
-    await deleteUrl(shortUrl);
-    res.send("Deleted url sucessfuly");
+    if (await deleteUrl(shortUrl)) {
+      res.send("Deleted url sucessfuly");
+    }
+    res.send("Url does not exist").status(404);
   } catch (error) {
     console.error("Failed to delete url ", error);
     res.status(500);

@@ -37,7 +37,12 @@ const modifyUrl = async (
 };
 
 const deleteUrl = async (urlToDelete) => {
-  await Url.destroy({ where: { shortUrl: urlToDelete } });
+  const urlToDelete = Url.findOne({ where: { shortUrl: urlToDelete } });
+  if (urlToDelete) {
+    await Url.destroy({ where: { shortUrl: urlToDelete } });
+    return true;
+  }
+  return false;
 };
 
 module.exports = {
