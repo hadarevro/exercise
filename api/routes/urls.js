@@ -1,5 +1,6 @@
 const router = require("express").Router();
 
+const { StatusCodes } = require("http-status-codes");
 const {
   getUrls,
   addUrl,
@@ -12,12 +13,12 @@ router.get("/", async (req, res) => {
   try {
     const urls = await getUrls();
     if (urls) {
-      return res.send(urls).status(200);
+      return res.send(urls).status(StatusCodes.OK);
     }
-    res.send("No urls found, try adding some").status(404);
+    res.send("No urls found, try adding some").status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error("Failed to get all urls", error);
-    res.status(500);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 });
 
@@ -25,12 +26,14 @@ router.post("/", async (req, res) => {
   const { originUrl, shortUrl } = req.body;
   try {
     if (await addUrl(originUrl, shortUrl)) {
-      return res.send(`Added ${originUrl} succesfully to db`).status(201);
+      return res
+        .send(`Added ${originUrl} succesfully to db`)
+        .status(StatusCodes.CREATED);
     }
-    res.send("Short url already exists").status(409);
+    res.send("Short url already exists").status(StatusCodes.CONFLICT);
   } catch (error) {
     console.error("Failed to add new url to the db", error);
-    res.status(500);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 });
 
@@ -40,12 +43,14 @@ router.get("/:shortUrl", async (req, res) => {
     const url = await getUrlByShorterUrl(shortUrl);
     if (url) {
       console.log(url.originUrl);
-      res.redirect(url.originUrl).status(200);
+      res.redirect(url.originUrl).status(StatusCodes.OK);
     }
-    res.send("Couldn't find urls matching your request").status(404);
+    res
+      .send("Couldn't find urls matching your request")
+      .status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error("Failed to find wanted url ", error);
-    res.status(500);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 });
 
@@ -55,12 +60,14 @@ router.patch("/", async (req, res) => {
     if (await modifyUrl(originUrl, shortUrl, newOriginUrl)) {
       res
         .send(`Modified ${originUrl} to ${newOriginUrl} succesfully`)
-        .status(200);
+        .status(StatusCodes.OK);
     }
-    res.send("Can't find original url or the shortned one").status(404);
+    res
+      .send("Can't find original url or the shortned one")
+      .status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error("Failed to to modify url", error);
-    res.status(500);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 });
 
@@ -68,12 +75,12 @@ router.delete("/", async (req, res) => {
   try {
     const shortUrl = req.body.shortUrl;
     if (await deleteUrl(shortUrl)) {
-      res.send("Deleted url sucessfuly");
+      res.send("Deleted url sucessfuly").status(StatusCodes.OK);
     }
-    res.send("Url does not exist").status(404);
+    res.send("Url does not exist").status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error("Failed to delete url ", error);
-    res.status(500);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 });
 
