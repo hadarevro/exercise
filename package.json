@@ -2,7 +2,7 @@
   "name": "exercise",
   "version": "1.0.0",
   "description": "",
-  "main": "api/index.js",
+  "main": "index.js",
   "scripts": {
     "dev": "node index.js",
     "test": "mocha --experimental-modules api/tests/url.test.js"

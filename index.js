@@ -1,13 +1,17 @@
 const startServer = require("./server");
 const {
-  connectToDb,
+  checkConnectionToDb,
+  createDbConnection,
   createTableByModel,
+  disconnectFromDb,
 } = require("./api/database/connection");
 
 const startServices = async () => {
+  const connection = await createDbConnection();
+  await checkConnectionToDb(connection);
+  await createTableByModel(connection);
+  await disconnectFromDb(connection);
   startServer();
-  await connectToDb();
-  await createTableByModel();
 };
 
-await startServices();
+startServices();

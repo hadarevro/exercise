@@ -1,7 +1,9 @@
 const Sequelize = require("sequelize");
-const { sequelize } = require("../database/connection");
+const { createDbConnection } = require("../database/connection");
 
-const Url = sequelize.define("urlsTable", {
+const sequelize = createDbConnection();
+
+const UrlTable = sequelize.define("urlsTable", {
   urlId: {
     type: Sequelize.UUID,
     primaryKey: true,
@@ -18,4 +20,4 @@ const Url = sequelize.define("urlsTable", {
   },
 });
 
-module.exports = Url;
+module.exports = UrlTable;
