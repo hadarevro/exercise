@@ -17,10 +17,9 @@ const {
 router.get("/all", async (req, res) => {
   const connection = createDbConnection();
   try {
-    checkConnectionToDb(connection);
+    await checkConnectionToDb(connection);
     const urls = await getAllUrls();
     if (urls) {
-      disconnectFromDb(connection);
       return res.send(urls).status(StatusCodes.OK);
     }
     res.send("No urls found, try adding some").status(StatusCodes.NOT_FOUND);
@@ -36,7 +35,7 @@ router.post("/add-url", async (req, res) => {
   const { originUrl, shortUrl } = req.body;
   const connection = createDbConnection();
   try {
-    checkConnectionToDb(connection);
+    await checkConnectionToDb(connection);
     const newUrl = await addUrl(originUrl, shortUrl);
     if (newUrl) {
       return res
@@ -55,7 +54,7 @@ router.post("/add-url", async (req, res) => {
 router.get("/:shortUrl", async (req, res) => {
   const connection = createDbConnection();
   try {
-    checkConnectionToDb(connection);
+    await checkConnectionToDb(connection);
     const { shortUrl } = req.params;
     const url = await getUrlByShorterUrl(shortUrl);
     if (url) {
@@ -76,7 +75,7 @@ router.get("/:shortUrl", async (req, res) => {
 router.patch("/modify-url", async (req, res) => {
   const connection = createDbConnection();
   try {
-    checkConnectionToDb(connection);
+    await checkConnectionToDb(connection);
     const { originUrl, shortUrl, newOriginUrl } = req.body;
     const modifiedUrl = await modifyUrl(originUrl, shortUrl, newOriginUrl);
     if (modifiedUrl) {
@@ -98,7 +97,7 @@ router.patch("/modify-url", async (req, res) => {
 router.delete("/remove-url/:shortUrl", async (req, res) => {
   const connection = createDbConnection();
   try {
-    checkConnectionToDb(connection);
+    await checkConnectionToDb(connection);
     const shortUrl = req.params.shortUrl;
     const deletedUrl = await deleteUrl(shortUrl);
     if (deletedUrl) {
