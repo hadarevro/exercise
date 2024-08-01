@@ -1,3 +1,4 @@
+const { StatusCodes } = require("http-status-codes");
 const UrlTable = require("../models/url");
 
 const getUrls = async () => {
@@ -7,10 +8,11 @@ const getUrls = async () => {
 const addUrl = async (originalUrlToAdd, shortUrlToAdd) => {
   const urls = await UrlTable.findOne({ where: { shortUrl: shortUrlToAdd } });
   if (!urls) {
-    return await UrlTable.create({
+    const newUrl = await UrlTable.create({
       originUrl: originalUrlToAdd,
       shortUrl: shortUrlToAdd,
     });
+    return newUrl;
   }
   return;
 };
@@ -33,9 +35,9 @@ const modifyUrl = async (
   if (urlToModify) {
     urlToModify.originUrl = newOriginUrl;
     await urlToModify.save();
-    return true;
+    return urlToModify;
   }
-  return false;
+  return;
 };
 
 const deleteUrl = async (shortUrlToDelete) => {
@@ -44,9 +46,9 @@ const deleteUrl = async (shortUrlToDelete) => {
   });
   if (urlToDelete) {
     await UrlTable.destroy({ where: { shortUrl: shortUrlToDelete } });
-    return true;
+    return urlToDelete;
   }
-  return false;
+  return;
 };
 
 module.exports = {

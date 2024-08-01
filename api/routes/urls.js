@@ -25,7 +25,8 @@ router.get("/all", async (req, res) => {
 router.post("/add-url", async (req, res) => {
   const { originUrl, shortUrl } = req.body;
   try {
-    if (await addUrl(originUrl, shortUrl)) {
+    const newUrl = await addUrl(originUrl, shortUrl);
+    if (newUrl) {
       return res
         .send(`Added ${originUrl} succesfully to db`)
         .status(StatusCodes.CREATED);
@@ -57,7 +58,8 @@ router.get("/:shortUrl", async (req, res) => {
 router.patch("/modify-url", async (req, res) => {
   try {
     const { originUrl, shortUrl, newOriginUrl } = req.body;
-    if (await modifyUrl(originUrl, shortUrl, newOriginUrl)) {
+    const modifiedUrl = await modifyUrl(originUrl, shortUrl, newOriginUrl);
+    if (modifiedUrl) {
       res
         .send(`Modified ${originUrl} to ${newOriginUrl} succesfully`)
         .status(StatusCodes.OK);
@@ -74,7 +76,8 @@ router.patch("/modify-url", async (req, res) => {
 router.delete("/remove-url", async (req, res) => {
   try {
     const shortUrl = req.body.shortUrl;
-    if (await deleteUrl(shortUrl)) {
+    const deletedUrl = await deleteUrl(shortUrl);
+    if (deletedUrl) {
       res.send("Deleted url sucessfuly").status(StatusCodes.OK);
     }
     res.send("Url does not exist").status(StatusCodes.NOT_FOUND);
