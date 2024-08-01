@@ -1,13 +1,13 @@
-const Url = require("../models/url");
+const UrlTable = require("../models/url");
 
 const getUrls = async () => {
-  return await Url.findAll();
+  return await UrlTable.findAll();
 };
 
 const addUrl = async (originalUrlToAdd, shortUrlToAdd) => {
-  const urls = await Url.findOne({ where: { shortUrl: shortUrlToAdd } });
+  const urls = await UrlTable.findOne({ where: { shortUrl: shortUrlToAdd } });
   if (!urls) {
-    return await Url.create({
+    return await UrlTable.create({
       originUrl: originalUrlToAdd,
       shortUrl: shortUrlToAdd,
     });
@@ -16,7 +16,9 @@ const addUrl = async (originalUrlToAdd, shortUrlToAdd) => {
 };
 
 const getUrlByShorterUrl = async (shorterUrl) => {
-  const originalUrl = await Url.findOne({ where: { shortUrl: shorterUrl } });
+  const originalUrl = await UrlTable.findOne({
+    where: { shortUrl: shorterUrl },
+  });
   return originalUrl;
 };
 
@@ -25,7 +27,7 @@ const modifyUrl = async (
   shortUrlToModify,
   newOriginUrl
 ) => {
-  const urlToModify = await Url.findOne({
+  const urlToModify = await UrlTable.findOne({
     where: { originUrl: originalUrlToModify, shortUrl: shortUrlToModify },
   });
   if (urlToModify) {
@@ -37,9 +39,11 @@ const modifyUrl = async (
 };
 
 const deleteUrl = async (shortUrlToDelete) => {
-  const urlToDelete = Url.findOne({ where: { shortUrl: shortUrlToDelete } });
+  const urlToDelete = UrlTable.findOne({
+    where: { shortUrl: shortUrlToDelete },
+  });
   if (urlToDelete) {
-    await Url.destroy({ where: { shortUrl: shortUrlToDelete } });
+    await UrlTable.destroy({ where: { shortUrl: shortUrlToDelete } });
     return true;
   }
   return false;
