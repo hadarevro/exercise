@@ -2,7 +2,7 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 
 const Url = require("./data/urlData");
-const startServer = require("../server");
+const startServer = require("../../server");
 const addUrl = require("./services/urlServices");
 
 chai.use(chaiHttp);

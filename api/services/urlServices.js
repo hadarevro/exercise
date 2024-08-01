@@ -36,10 +36,10 @@ const modifyUrl = async (
   return false;
 };
 
-const deleteUrl = async (urlToDelete) => {
-  const urlToDelete = Url.findOne({ where: { shortUrl: urlToDelete } });
+const deleteUrl = async (shortUrlToDelete) => {
+  const urlToDelete = Url.findOne({ where: { shortUrl: shortUrlToDelete } });
   if (urlToDelete) {
-    await Url.destroy({ where: { shortUrl: urlToDelete } });
+    await Url.destroy({ where: { shortUrl: shortUrlToDelete } });
     return true;
   }
   return false;

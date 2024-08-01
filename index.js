@@ -1,4 +1,4 @@
-const startServer = require("./api/server");
+const startServer = require("./server");
 const {
   connectToDb,
   createTableByModel,
