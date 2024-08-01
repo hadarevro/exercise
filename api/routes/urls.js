@@ -9,7 +9,7 @@ const {
   deleteUrl,
 } = require("../services/urlServices");
 
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const urls = await getUrls();
     if (urls) {
@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/add-url", async (req, res) => {
   const { originUrl, shortUrl } = req.body;
   try {
     if (await addUrl(originUrl, shortUrl)) {
@@ -54,7 +54,7 @@ router.get("/:shortUrl", async (req, res) => {
   }
 });
 
-router.patch("/", async (req, res) => {
+router.patch("/modify-url", async (req, res) => {
   try {
     const { originUrl, shortUrl, newOriginUrl } = req.body;
     if (await modifyUrl(originUrl, shortUrl, newOriginUrl)) {
@@ -71,7 +71,7 @@ router.patch("/", async (req, res) => {
   }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/remove-url", async (req, res) => {
   try {
     const shortUrl = req.body.shortUrl;
     if (await deleteUrl(shortUrl)) {
