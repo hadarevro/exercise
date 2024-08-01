@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const { StatusCodes } = require("http-status-codes");
 const {
-  getUrls,
+  getAllUrls,
   addUrl,
   getUrlByShorterUrl,
   modifyUrl,
@@ -11,7 +11,7 @@ const {
 
 router.get("/all", async (req, res) => {
   try {
-    const urls = await getUrls();
+    const urls = await getAllUrls();
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
     }

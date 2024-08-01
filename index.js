@@ -6,8 +6,8 @@ const {
 
 const startServices = async () => {
   startServer();
-  connectToDb();
-  createTableByModel();
+  await connectToDb();
+  await createTableByModel();
 };
 
-startServices();
+await startServices();

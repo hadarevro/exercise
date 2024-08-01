@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const UrlTable = require("../models/url");
 
-const getUrls = async () => {
+const getAllUrls = async () => {
   return await UrlTable.findAll();
 };
 
@@ -52,7 +52,7 @@ const deleteUrl = async (shortUrlToDelete) => {
 };
 
 module.exports = {
-  getUrls,
+  getAllUrls,
   addUrl,
   getUrlByShorterUrl,
   modifyUrl,
