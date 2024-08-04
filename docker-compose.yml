@@ -29,17 +29,18 @@ services:
   app: 
     image: urlshortner
     container_name: urlshortner
+    restart: always
     build: 
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "5432:5432"
     environment:
       - PORT=3000
       - POSTGRES_DB=example-database
       - POSTGRES_USER=example-database
       - POSTGRES_PASSWORD=mysecretpassword
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST=urlshortner
       - POSTGRES_DIALECT=postgres
     depends_on:
       - postgres

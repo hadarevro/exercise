@@ -1,61 +1,41 @@
-const chai = require("chai");
-const chaiHttp = require("chai-http");
+const supertest = require("supertest");
 
-const Url = require("./data/urlData");
+const urlsData = require("./data/urlData");
+const UrlMocokTable = require("./data/urlData");
 const startServer = require("../../server");
-const addUrl = require("./services/urlServices");
+const getAllUrls = require("./services/urlServices");
+const {
+  createDbConnection,
+  checkConnectionToDb,
+  disconnectFromDb,
+  createTableByModel,
+} = require("../database/connection");
 
-chai.use(chaiHttp);
-const expect = chai.expect;
-const should = chai.should();
+const app = startServer();
 
-before((done) => {
-  Url.destroy({
-    where: {},
-    truncate: true,
-  });
-  done();
+before(async () => {
+  const connection = await createDbConnection();
+  await checkConnectionToDb(connection);
+  await createTableByModel(connection);
+  await disconnectFromDb(connection);
 });
 
-after((done) => {
-  Url.destroy({
-    where: {},
-    truncate: true,
+describe("Get requests for urls", () => {
+  it("Should return all urls", () => {
+    supertest(app)
+      .get("/urls/all")
+      .expect(200)
+      .then((res) => {
+        expect(res.body).toEqual(urlsData);
+      });
   });
-  done();
+
+  it("Should return 404 status codes when there are no urls in db", () => {
+    supertest(app)
+      .get("/urls/all")
+      .expect(404)
+      .then((res) => {
+        expect(res.body).toEqual([]);
+      });
+  });
 });
-
-describe(
-  "Get requests for urls",
-  it("Should return all urls", (done) => {
-    addUrl();
-    chai
-      .request(startServer())
-      .get("/")
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a("array");
-        res.body.length.should.be.eql(1);
-      })
-      .expect(200, done());
-  }),
-
-  it("Should return 404 if no urls in db", (done) => {
-    chai
-      .request(startServer())
-      .get("/")
-      .end((res, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a("array");
-        res.body.length.should.be.eql(0);
-      })
-      .expect(200, done());
-  })
-);
-
-describe(
-  "Post requests for urls",
-  it("Should post a valid product", (done) => {
-    chai.request(startServer()).post("/");
-  })
-);

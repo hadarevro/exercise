@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
-const { sequelize } = require("../database/connection");
+const { createDbConnection } = require("../../database/connection");
+const sequelize = createDbConnection();
 
-const Url = sequelize.define("urlMocks", {
+const UrlMocokTable = sequelize.define("urlMocks", {
   urlId: {
     type: Sequelize.UUID,
     primaryKey: true,
@@ -23,4 +24,10 @@ const urlToInsert = {
   shortUrl: "asd",
 };
 
-module.exports = { urlToInsert, Url };
+const urlsData = {
+  urlId: "asdfbhjhgfw345tgf",
+  originUrl: "originllongurl",
+  shortUrl: "short",
+};
+
+module.exports = { urlToInsert, UrlMocokTable, urlsData };

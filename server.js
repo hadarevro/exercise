@@ -20,6 +20,7 @@ const startServer = () => {
   app.use("/url", urlRouter);
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   listenToServer();
+  return app;
 };
 
 module.exports = startServer;

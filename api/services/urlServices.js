@@ -1,4 +1,3 @@
-const { StatusCodes } = require("http-status-codes");
 const UrlTable = require("../models/url");
 
 const getAllUrls = async () => {
