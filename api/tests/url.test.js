@@ -74,3 +74,19 @@ describe("Post requests for urls", () => {
       .expect(StatusCodes.CONFLICT);
   });
 });
+
+describe("Delete requests for urls", () => {
+  it("Should delete a specified url from db", () => {
+    addUrl(urlToInsert.originUrl, urlToInsert.shortUrl);
+    supertest(app)
+      .delete(`/remove-url/:${urlToInsert.shortUrl}`)
+      .expect(StatusCodes.OK)
+      .expect(!isDbContainsUrl(urlToInsert));
+  });
+
+  it("Should fail to delete unexisting url", () => {
+    supertest(app)
+      .delete(`/remove-url/:${urlToInsert.shortUrl}`)
+      .expect(StatusCodes.NOT_FOUND);
+  });
+});

@@ -60,7 +60,7 @@ const deleteAllUrls = async () => {
 };
 
 const isDbContainsUrl = async (url) => {
-  urlFound = UrlTable.findOne(url);
+  urlFound = await UrlTable.findOne(url);
   return !urlFound.length() ? true : false;
 };
 
