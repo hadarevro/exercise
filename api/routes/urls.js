@@ -7,6 +7,9 @@ const {
   getUrlByShorterUrl,
   modifyUrl,
   deleteUrl,
+  getShortUrlsStartingBy,
+  getShortUrlsContaining,
+  getShortUrlsNotContaining,
 } = require("../services/urlServices");
 const {
   checkConnectionToDb,
@@ -25,6 +28,66 @@ router.get("/all", async (req, res) => {
     res.send("No urls found, try adding some").status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error("Failed to get all urls", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+  } finally {
+    disconnectFromDb(connection);
+  }
+});
+
+router.get("/starting-by", async (req, res) => {
+  const connection = createDbConnection();
+  try {
+    await checkConnectionToDb(connection);
+    const { startingBy } = req.body;
+    const urls = getShortUrlsStartingBy(startingBy);
+    if (urls) {
+      return res.send(urls).status(StatusCodes.OK);
+    }
+    res
+      .send(`No urls found starting by ${startingBy} found`)
+      .status(StatusCodes.NOT_FOUND);
+  } catch (error) {
+    console.error(`failed to get urls starting by ${startingBy}`, error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+  } finally {
+    disconnectFromDb(connection);
+  }
+});
+
+router.get("/contains", async (req, res) => {
+  const connection = createDbConnection();
+  try {
+    await checkConnectionToDb(connection);
+    const { contains } = req.body;
+    const urls = getShortUrlsContaining(contains);
+    if (urls) {
+      return res.send(urls).status(StatusCodes.OK);
+    }
+    res
+      .send(`No urls containing ${contains} found`)
+      .status(StatusCodes.NOT_FOUND);
+  } catch (error) {
+    console.error(`failed to get urls contaning ${contains}`, error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+  } finally {
+    disconnectFromDb(connection);
+  }
+});
+
+router.get("/not-containing", async (req, res) => {
+  const connection = createDbConnection();
+  try {
+    await checkConnectionToDb(connection);
+    const { notContaining } = req.body;
+    const urls = getShortUrlsNotContaining(notContaining);
+    if (urls) {
+      return res.send(urls).status(StatusCodes.OK);
+    }
+    res
+      .send(`No urls not containing ${notContaining} found`)
+      .status(StatusCodes.NOT_FOUND);
+  } catch (error) {
+    console.error(`failed to get urls not containing ${notContaining} `, error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   } finally {
     disconnectFromDb(connection);
