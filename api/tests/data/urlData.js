@@ -1,6 +1,13 @@
-const urlToInsert = {
-  originUrl: "asdfgghj",
-  shortUrl: "asd",
+const mockUrlData = {
+  originUrl: "longUrlForTests",
+  shortUrl: "short",
 };
 
-module.exports = { urlToInsert };
+const modifiedUrl = {
+  originUrl: "longUrlAfterModification",
+  shortUrl: "modifiedShort",
+};
+
+const randomUrl = "randomUrl";
+
+module.exports = { mockUrlData, modifiedUrl, randomUrl };

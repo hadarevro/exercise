@@ -59,7 +59,7 @@ router.get("/:shortUrl", async (req, res) => {
     const url = await getUrlByShorterUrl(shortUrl);
     if (url) {
       console.log(url.originUrl);
-      res.redirect(url.originUrl).status(StatusCodes.OK);
+      res.redirect(url.originUrl).status(StatusCodes.PERMANENT_REDIRECT);
     }
     res
       .send("Couldn't find urls matching your request")
