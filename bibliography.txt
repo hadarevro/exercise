@@ -15,3 +15,4 @@ bibliography:
 13. https://www.npmjs.com/
 14. https://www.w3schools.com/
 15. https://blog.logrocket.com/node-js-unit-testing-mocha-chai-sinon/
+16. https://sequelize.org/docs/v7/querying/operators/

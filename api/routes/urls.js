@@ -36,10 +36,11 @@ router.get("/all", async (req, res) => {
 
 router.get("/starting-by", async (req, res) => {
   const connection = createDbConnection();
+  const { startingBy } = req.body;
   try {
     await checkConnectionToDb(connection);
-    const { startingBy } = req.body;
-    const urls = getShortUrlsStartingBy(startingBy);
+    const urls = await getShortUrlsStartingBy(startingBy);
+    console.log(urls[0]);
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
     }
@@ -56,10 +57,10 @@ router.get("/starting-by", async (req, res) => {
 
 router.get("/contains", async (req, res) => {
   const connection = createDbConnection();
+  const { contains } = req.body;
   try {
     await checkConnectionToDb(connection);
-    const { contains } = req.body;
-    const urls = getShortUrlsContaining(contains);
+    const urls = await getShortUrlsContaining(contains);
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
     }
@@ -76,10 +77,10 @@ router.get("/contains", async (req, res) => {
 
 router.get("/not-containing", async (req, res) => {
   const connection = createDbConnection();
+  const { notContaining } = req.body;
   try {
     await checkConnectionToDb(connection);
-    const { notContaining } = req.body;
-    const urls = getShortUrlsNotContaining(notContaining);
+    const urls = await getShortUrlsNotContaining(notContaining);
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
     }
