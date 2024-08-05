@@ -1,6 +1,6 @@
 const supertest = require("supertest");
 
-const { UrlMocokTable } = require("../models/url");
+const { getUrlTable } = require("../models/url");
 const urlsData = require("./data/urlData");
 const startServer = require("../../server");
 const {
@@ -11,6 +11,7 @@ const {
 } = require("../database/connection");
 
 const app = startServer();
+const UrlMocokTable = getUrlTable();
 
 before(async () => {
   const connection = await createDbConnection();

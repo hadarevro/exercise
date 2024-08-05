@@ -1,4 +1,6 @@
-const { UrlTable } = require("../models/url");
+const { getUrlTable } = require("../models/url");
+
+const UrlTable = getUrlTable();
 
 const getAllUrls = async () => {
   return await UrlTable.findAll();
