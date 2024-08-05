@@ -52,10 +52,24 @@ const deleteUrl = async (shortUrlToDelete) => {
   return;
 };
 
+const deleteAllUrls = async () => {
+  await UrlTable.destroy({
+    where: {},
+    truncate: true,
+  });
+};
+
+const isDbContainsUrl = async (url) => {
+  urlFound = UrlTable.findOne(url);
+  return !urlFound.length() ? true : false;
+};
+
 module.exports = {
   getAllUrls,
   addUrl,
   getUrlByShorterUrl,
   modifyUrl,
   deleteUrl,
+  deleteAllUrls,
+  isDbContainsUrl,
 };

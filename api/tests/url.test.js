@@ -1,7 +1,7 @@
 const supertest = require("supertest");
+const { StatusCodes } = require("http-status-codes");
 
-const { getUrlTable } = require("../models/url");
-const urlsData = require("./data/urlData");
+const { urlToInsert } = require("./data/urlData");
 const startServer = require("../../server");
 const {
   createDbConnection,
@@ -9,9 +9,11 @@ const {
   disconnectFromDb,
   createTableByModel,
 } = require("../database/connection");
-
-const app = startServer();
-const UrlMocokTable = getUrlTable();
+const {
+  addUrl,
+  deleteAllUrls,
+  isDbContainsUrl,
+} = require("../services/urlServices");
 
 before(async () => {
   const connection = await createDbConnection();
@@ -20,18 +22,22 @@ before(async () => {
   await disconnectFromDb(connection);
 });
 
-after(async () => {
-  await UrlMocokTable.destroy({
-    where: {},
-    truncate: true,
-  });
+const app = startServer();
+
+beforeEach(async () => {
+  await deleteAllUrls();
+});
+
+afterEach(async () => {
+  await deleteAllUrls();
 });
 
 describe("Get requests for urls", () => {
   it("Should return all urls", () => {
+    addUrl(urlToInsert.originUrl, urlToInsert.shortUrl);
     supertest(app)
       .get("/urls/all")
-      .expect(200)
+      .expect(StatusCodes.OK)
       .then((res) => {
         expect(res.body).toEqual(urlsData);
       });
@@ -40,7 +46,7 @@ describe("Get requests for urls", () => {
   it("Should return 404 status codes when there are no urls in db", () => {
     supertest(app)
       .get("/urls/all")
-      .expect(404)
+      .expect(StatusCodes.NOT_FOUND)
       .then((res) => {
         expect(res.body).toEqual([]);
       });
@@ -51,10 +57,20 @@ describe("Post requests for urls", () => {
   it("Should post a new url to db", () => {
     supertest(app)
       .post("/add-url")
-      .send({
-        originUrl: "https://arunkumarvallal.medium.com",
-        shortUrl: "lplp",
-      })
-      .expect(201);
+      .send(urlToInsert)
+      .expect(StatusCodes.CREATED)
+      .expect(isDbContainsUrl(urlToInsert))
+      .then((res) => {
+        expect(res.body.originUrl).toEqual(urlToInsert.originUrl);
+        expect(res.body.shortUrl).toEqual(urlToInsert.shortUrl);
+      });
+  });
+
+  it("Should not post a url to db if already exists", () => {
+    addUrl(urlToInsert.originUrl, urlToInsert.shortUrl);
+    supertest(app)
+      .post("/add-url")
+      .send({ urlToInsert })
+      .expect(StatusCodes.CONFLICT);
   });
 });
