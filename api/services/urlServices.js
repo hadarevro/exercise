@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { getUrlTable } = require("../models/url");
 
 const UrlTable = getUrlTable();
@@ -64,6 +65,25 @@ const isDbContainsUrl = async (url) => {
   return !urlFound.length() ? true : false;
 };
 
+const getShortUrlsStartingBy = async (stringBy) => {
+  urlsFound = await UrlTable.findAll({
+    where: { shortUrl: { [Op.startsWith]: stringBy } },
+  });
+  return urlsFound;
+};
+
+const getShortUrlsContaining = async (contains) => {
+  urlsFound = await UrlTable.findAll({
+    where: { shortUrl: { [Op.like]: `%${contains}%` } },
+  });
+};
+
+const getShortUrlsNotContaining = async (notContains) => {
+  urlsFound = await UrlTable.findAll({
+    where: { shortUrl: { [Op.notLike]: `%${notContains}%` } },
+  });
+};
+
 module.exports = {
   getAllUrls,
   addUrl,
@@ -72,4 +92,7 @@ module.exports = {
   deleteUrl,
   deleteAllUrls,
   isDbContainsUrl,
+  getShortUrlsStartingBy,
+  getShortUrlsContaining,
+  getShortUrlsNotContaining,
 };
