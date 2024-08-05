@@ -1,9 +1,8 @@
 const supertest = require("supertest");
 
+const { UrlMocokTable } = require("../models/url");
 const urlsData = require("./data/urlData");
-const UrlMocokTable = require("./data/urlData");
 const startServer = require("../../server");
-const getAllUrls = require("./services/urlServices");
 const {
   createDbConnection,
   checkConnectionToDb,
@@ -18,6 +17,13 @@ before(async () => {
   await checkConnectionToDb(connection);
   await createTableByModel(connection);
   await disconnectFromDb(connection);
+});
+
+after(async () => {
+  await UrlMocokTable.destroy({
+    where: {},
+    truncate: true,
+  });
 });
 
 describe("Get requests for urls", () => {
@@ -37,5 +43,17 @@ describe("Get requests for urls", () => {
       .then((res) => {
         expect(res.body).toEqual([]);
       });
+  });
+});
+
+describe("Post requests for urls", () => {
+  it("Should post a new url to db", () => {
+    supertest(app)
+      .post("/add-url")
+      .send({
+        originUrl: "https://arunkumarvallal.medium.com",
+        shortUrl: "lplp",
+      })
+      .expect(201);
   });
 });

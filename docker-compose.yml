@@ -34,13 +34,13 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5432:5432"
+      - "8080:8080"
     environment:
       - PORT=3000
       - POSTGRES_DB=example-database
       - POSTGRES_USER=example-database
       - POSTGRES_PASSWORD=mysecretpassword
-      - POSTGRES_HOST=urlshortner
+      - POSTGRES_HOST=postgres
       - POSTGRES_DIALECT=postgres
     depends_on:
       - postgres
