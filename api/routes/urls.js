@@ -1,5 +1,5 @@
-const router = require("express").Router();
 const { StatusCodes } = require("http-status-codes");
+const router = require("express").Router();
 
 const {
   getAllUrls,
@@ -65,7 +65,7 @@ router.get("/:shortUrl", async (req, res) => {
       .send("Couldn't find urls matching your request")
       .status(StatusCodes.NOT_FOUND);
   } catch (error) {
-    console.error("Failed to find wanted url ", error);
+    console.error("Failed to find wanted url", error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   } finally {
     disconnectFromDb(connection);
@@ -105,7 +105,7 @@ router.delete("/remove-url/:shortUrl", async (req, res) => {
     }
     res.send("Url does not exist").status(StatusCodes.NOT_FOUND);
   } catch (error) {
-    console.error("Failed to delete url ", error);
+    console.error("Failed to delete url", error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   } finally {
     disconnectFromDb(connection);

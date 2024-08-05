@@ -15,17 +15,13 @@ const {
   isDbContainsUrl,
 } = require("../services/urlServices");
 
+const app = startServer();
+
 before(async () => {
   const connection = await createDbConnection();
   await checkConnectionToDb(connection);
   await createTableByModel(connection);
   await disconnectFromDb(connection);
-});
-
-const app = startServer();
-
-beforeEach(async () => {
-  await deleteAllUrls();
 });
 
 afterEach(async () => {

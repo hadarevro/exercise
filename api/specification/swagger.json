@@ -63,8 +63,8 @@
                   }
               ],
               "responses": {
-                  "200": {
-                      "description": "got long url"
+                  "301": {
+                      "description": "redirected to original url"
                   },
                   "404": {
                       "description": "could not find url"
