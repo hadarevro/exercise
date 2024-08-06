@@ -1,4 +1,6 @@
 const { Op } = require("sequelize");
+
+const NOT_FOUND_ERROR = require("../errors/errors");
 const { getUrlTable } = require("../models/url");
 
 const UrlTable = getUrlTable();
@@ -16,7 +18,7 @@ const addUrl = async (originalUrlToAdd, shortUrlToAdd) => {
     });
     return newUrl;
   }
-  return;
+  return NOT_FOUND_ERROR;
 };
 
 const getUrlByShorterUrl = async (shorterUrl) => {
@@ -50,7 +52,7 @@ const deleteUrl = async (shortUrlToDelete) => {
     await UrlTable.destroy({ where: { shortUrl: shortUrlToDelete } });
     return urlToDelete;
   }
-  return;
+  return NOT_FOUND_ERROR;
 };
 
 const deleteAllUrls = async () => {

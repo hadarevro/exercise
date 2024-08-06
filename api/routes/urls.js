@@ -16,6 +16,7 @@ const {
   createDbConnection,
   disconnectFromDb,
 } = require("../database/connection");
+const { NO_URLS_FOUND_ERROR } = require("../errors/errors");
 
 router.get("/all", async (req, res) => {
   const connection = createDbConnection();
@@ -24,8 +25,9 @@ router.get("/all", async (req, res) => {
     const urls = await getAllUrls();
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
+    } else {
+      throw NO_URLS_FOUND_ERROR;
     }
-    res.send("No urls found, try adding some").status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error("Failed to get all urls", error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -40,13 +42,11 @@ router.get("/starting-by", async (req, res) => {
   try {
     await checkConnectionToDb(connection);
     const urls = await getShortUrlsStartingBy(startingBy);
-    console.log(urls[0]);
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
+    } else {
+      throw NO_URLS_FOUND_ERROR;
     }
-    res
-      .send(`No urls found starting by ${startingBy} found`)
-      .status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error(`failed to get urls starting by ${startingBy}`, error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -63,10 +63,9 @@ router.get("/contains", async (req, res) => {
     const urls = await getShortUrlsContaining(contains);
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
+    } else {
+      throw NO_URLS_FOUND_ERROR;
     }
-    res
-      .send(`No urls containing ${contains} found`)
-      .status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error(`failed to get urls contaning ${contains}`, error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -83,10 +82,9 @@ router.get("/not-containing", async (req, res) => {
     const urls = await getShortUrlsNotContaining(notContaining);
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
+    } else {
+      throw NO_URLS_FOUND_ERROR;
     }
-    res
-      .send(`No urls not containing ${notContaining} found`)
-      .status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error(`failed to get urls not containing ${notContaining} `, error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -124,10 +122,9 @@ router.get("/:shortUrl", async (req, res) => {
     if (url) {
       console.log(url.originUrl);
       res.redirect(url.originUrl).status(StatusCodes.PERMANENT_REDIRECT);
+    } else {
+      throw NO_URLS_FOUND_ERROR;
     }
-    res
-      .send("Couldn't find urls matching your request")
-      .status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error("Failed to find wanted url", error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -146,10 +143,9 @@ router.patch("/modify-url", async (req, res) => {
       res
         .send(`Modified ${originUrl} to ${newOriginUrl} succesfully`)
         .status(StatusCodes.OK);
+    } else {
+      throw NO_URLS_FOUND_ERROR;
     }
-    res
-      .send("Can't find original url or the shortned one")
-      .status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error("Failed to to modify url", error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -166,8 +162,9 @@ router.delete("/remove-url/:shortUrl", async (req, res) => {
     const deletedUrl = await deleteUrl(shortUrl);
     if (deletedUrl) {
       res.send("Deleted url sucessfuly").status(StatusCodes.OK);
+    } else {
+      throw NO_URLS_FOUND_ERROR;
     }
-    res.send("Url does not exist").status(StatusCodes.NOT_FOUND);
   } catch (error) {
     console.error("Failed to delete url", error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR);

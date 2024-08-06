@@ -1,7 +1,7 @@
 const supertest = require("supertest");
 const { StatusCodes } = require("http-status-codes");
 
-const { mockUrl, secondMockUrl, randomUrl } = require("./data/urlData");
+const { mockUrl, secondMockUrl, randomUrl } = require("./data/urlDataConst");
 const startServer = require("../../server");
 const {
   createDbConnection,
