@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node index.js",
+    "dev": "cross-env node index.js",
     "test": "cross-env NODE_ENV=test mocha --parallel --watch api/tests/url.test.js"
   },
   "keywords": [],
