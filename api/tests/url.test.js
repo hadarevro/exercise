@@ -47,6 +47,82 @@ describe("Get requests for urls", () => {
         expect(res.body).toEqual([]);
       });
   });
+
+  describe("Get requests for starting by", () => {
+    it("Should return all urls starting by", () => {
+      addUrl(mockUrlData.originUrl, mockUrlData.shortUrl);
+      addUrl(modifiedUrl.originUrl, modifiedUrl.shortUrl);
+      supertest(app)
+        .get("urls/starting-by")
+        .send({ startingBy: "short" })
+        .expect(StatusCodes.OK)
+        .then((res) => {
+          expect(res.body.originUrl).toEqual(mockUrlData.originUrl);
+          expect(res.body.shortUrl).toEqual(mockUrlData.shortUrl);
+        });
+    });
+
+    it("Should return 404 status codes when there are no urls in db starting by", () => {
+      addUrl(mockUrlData.originUrl, mockUrlData.shortUrl);
+      addUrl(modifiedUrl.originUrl, modifiedUrl.shortUrl);
+      supertest(app)
+        .get("urls/starting-by")
+        .send({ startingBy: "asdfg" })
+        .expect(StatusCodes.NOT_FOUND)
+        .then((res) => {
+          expect(res.body.originUrl).toEqual(mockUrlData.originUrl);
+          expect(res.body.shortUrl).toEqual(mockUrlData.shortUrl);
+        });
+    });
+  });
+
+  describe("Get requests for contaning", () => {
+    it("Should return all urls containig a given pattern", () => {
+      addUrl(mockUrlData.originUrl, mockUrlData.shortUrl);
+      addUrl(modifiedUrl.originUrl, modifiedUrl.shortUrl);
+      supertest(app)
+        .get("urls/contains")
+        .send({ contains: "For" })
+        .expect(StatusCodes.OK)
+        .then((res) => {
+          expect(res.body.originUrl).toEqual(mockUrlData.originUrl);
+          expect(res.body.shortUrl).toEqual(mockUrlData.shortUrl);
+        });
+    });
+
+    it("Should return 404 code when no urls in db containig a given pattern", () => {
+      addUrl(mockUrlData.originUrl, mockUrlData.shortUrl);
+      addUrl(modifiedUrl.originUrl, modifiedUrl.shortUrl);
+      supertest(app)
+        .get("urls/contains")
+        .send({ contains: "asdfghj" })
+        .expect(StatusCodes.NOT_FOUND);
+    });
+  });
+
+  describe("Get requests for not contaning", () => {
+    it("Should return all urls not containig a given pattern", () => {
+      addUrl(mockUrlData.originUrl, mockUrlData.shortUrl);
+      addUrl(modifiedUrl.originUrl, modifiedUrl.shortUrl);
+      supertest(app)
+        .get("urls/contains")
+        .send({ notContaining: "For" })
+        .expect(StatusCodes.OK)
+        .then((res) => {
+          expect(res.body.originUrl).toEqual(modifiedUrl.originUrl);
+          expect(res.body.shortUrl).toEqual(modifiedUrl.shortUrl);
+        });
+    });
+
+    it("Should return 404 code when no urls in db not containig a given pattern", () => {
+      addUrl(mockUrlData.originUrl, mockUrlData.shortUrl);
+      addUrl(modifiedUrl.originUrl, modifiedUrl.shortUrl);
+      supertest(app)
+        .get("urls/contains")
+        .send({ notContaining: "Url" })
+        .expect(StatusCodes.NOT_FOUND);
+    });
+  });
 });
 
 describe("Post requests for urls", () => {

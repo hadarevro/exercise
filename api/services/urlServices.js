@@ -81,7 +81,7 @@ const getShortUrlsContaining = async (contains) => {
 
 const getShortUrlsNotContaining = async (notContains) => {
   urlsFound = await UrlTable.findAll({
-    where: { shortUrl: { [Op.notLike]: notContains } },
+    where: { shortUrl: { [Op.notLike]: `%${notContains}%` } },
   });
   return urlsFound;
 };

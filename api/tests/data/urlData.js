@@ -4,7 +4,7 @@ const mockUrlData = {
 };
 
 const modifiedUrl = {
-  originUrl: "longUrlAfterModification",
+  originUrl: "UrlAfterModification",
   shortUrl: "modifiedShort",
 };
 
