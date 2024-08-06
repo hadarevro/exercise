@@ -19,8 +19,9 @@ const {
 const { NO_URLS_FOUND_ERROR } = require("../errors/errors");
 
 router.get("/all", async (req, res) => {
-  const connection = createDbConnection();
+  let connection;
   try {
+    connection = createDbConnection();
     await checkConnectionToDb(connection);
     const urls = await getAllUrls();
     if (urls) {
@@ -37,10 +38,10 @@ router.get("/all", async (req, res) => {
 });
 
 router.get("/starting-by", async (req, res) => {
-  const connection = createDbConnection();
+  let connection;
   const { startingBy } = req.body;
   try {
-    await checkConnectionToDb(connection);
+    connection = await createDbConnection();
     const urls = await getShortUrlsStartingBy(startingBy);
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
@@ -56,10 +57,10 @@ router.get("/starting-by", async (req, res) => {
 });
 
 router.get("/contains", async (req, res) => {
-  const connection = createDbConnection();
   const { contains } = req.body;
+  let connection;
   try {
-    await checkConnectionToDb(connection);
+    connection = await checkConnectionToDb(connection);
     const urls = await getShortUrlsContaining(contains);
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
@@ -75,10 +76,10 @@ router.get("/contains", async (req, res) => {
 });
 
 router.get("/not-containing", async (req, res) => {
-  const connection = createDbConnection();
   const { notContaining } = req.body;
+  let connection;
   try {
-    await checkConnectionToDb(connection);
+    connection = await checkConnectionToDb(connection);
     const urls = await getShortUrlsNotContaining(notContaining);
     if (urls) {
       return res.send(urls).status(StatusCodes.OK);
@@ -95,9 +96,9 @@ router.get("/not-containing", async (req, res) => {
 
 router.post("/add-url", async (req, res) => {
   const { originUrl, shortUrl } = req.body;
-  const connection = createDbConnection();
+  let connection;
   try {
-    await checkConnectionToDb(connection);
+    connection = await checkConnectionToDb(connection);
     const newUrl = await addUrl(originUrl, shortUrl);
     if (newUrl) {
       return res
@@ -114,13 +115,12 @@ router.post("/add-url", async (req, res) => {
 });
 
 router.get("/:shortUrl", async (req, res) => {
-  const connection = createDbConnection();
+  let connection;
   try {
-    await checkConnectionToDb(connection);
+    connection = await checkConnectionToDb(connection);
     const { shortUrl } = req.params;
     const url = await getUrlByShorterUrl(shortUrl);
     if (url) {
-      console.log(url.originUrl);
       res.redirect(url.originUrl).status(StatusCodes.PERMANENT_REDIRECT);
     } else {
       throw NO_URLS_FOUND_ERROR;
@@ -134,9 +134,9 @@ router.get("/:shortUrl", async (req, res) => {
 });
 
 router.patch("/modify-url", async (req, res) => {
-  const connection = createDbConnection();
+  let connection;
   try {
-    await checkConnectionToDb(connection);
+    connection = await checkConnectionToDb(connection);
     const { originUrl, shortUrl, newOriginUrl } = req.body;
     const modifiedUrl = await modifyUrl(originUrl, shortUrl, newOriginUrl);
     if (modifiedUrl) {
@@ -155,9 +155,9 @@ router.patch("/modify-url", async (req, res) => {
 });
 
 router.delete("/remove-url/:shortUrl", async (req, res) => {
-  const connection = createDbConnection();
+  let connection;
   try {
-    await checkConnectionToDb(connection);
+    connection = await checkConnectionToDb(connection);
     const shortUrl = req.params.shortUrl;
     const deletedUrl = await deleteUrl(shortUrl);
     if (deletedUrl) {
