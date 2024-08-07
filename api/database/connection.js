@@ -2,16 +2,17 @@ const { Sequelize } = require("sequelize");
 
 require("dotenv").config();
 
-const createDbConnection = () => {
-  return new Sequelize(
-    process.env.DATABASE_NAME,
-    process.env.USER_NAME,
-    process.env.DATABASE_PASSWORD,
-    {
-      host: process.env.HOST,
-      dialect: process.env.DIALECT,
-    }
-  );
+const createDbConnection = (
+  databaseName,
+  userName,
+  databasePassword,
+  host,
+  dialect
+) => {
+  return new Sequelize(databaseName, userName, databasePassword, {
+    host: host,
+    dialect: dialect,
+  });
 };
 
 const checkConnectionToDb = async (sequelize) => {
