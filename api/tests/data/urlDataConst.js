@@ -1,13 +1,27 @@
-const mockUrl = {
-  originUrl: "longUrlForTests",
-  shortUrl: "short",
+module.exports = {
+  mockUrl: {
+    originUrl: "longUrlForTests",
+    shortUrl: "short",
+  },
+
+  secondMockUrl: {
+    originUrl: "longUrlAfterModification",
+    shortUrl: "modifiedShort",
+  },
+
+  randomUrl: "randomUrl",
 };
 
-const secondMockUrl = {
-  originUrl: "longUrlAfterModification",
-  shortUrl: "modifiedShort",
-};
+// const mockUrl = {
+//   originUrl: "longUrlForTests",
+//   shortUrl: "short",
+// };
 
-const randomUrl = "randomUrl";
+// const secondMockUrl = {
+//   originUrl: "longUrlAfterModification",
+//   shortUrl: "modifiedShort",
+// };
 
-module.exports = { mockUrl, secondMockUrl, randomUrl };
+// const randomUrl = "randomUrl";
+
+// module.exports = { mockUrl, secondMockUrl, randomUrl };
