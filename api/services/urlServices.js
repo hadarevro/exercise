@@ -8,7 +8,12 @@ const {
 const NOT_FOUND_ERROR = require("../errors/errors");
 const { getUrlTable } = require("../models/url");
 
-const UrlTable = getUrlTable(process.env.TABLE_NAME);
+let UrlTable;
+try {
+  UrlTable = getUrlTable(process.env.TABLE_NAME);
+} catch (error) {
+  console.error("Failed to create url table");
+}
 
 const connectToDb = async () => {
   const connection = await createDbConnection();

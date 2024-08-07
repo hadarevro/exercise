@@ -4,11 +4,6 @@ const { createDbConnection } = require("../database/connection");
 const sequelize = createDbConnection();
 
 const getUrlTable = (tableName) => {
-  // const tableName =
-  //   process.env.NODE_ENV === "test"
-  //     ? process.env.TEST_TABLE_NAME
-  //     : process.env.DEV_TABLE_NAME;
-
   const UrlTable = sequelize.define(tableName, {
     urlId: {
       type: Sequelize.UUID,
