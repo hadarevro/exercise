@@ -18,7 +18,7 @@ const handleNoUrlsFoundError = (res, error) => {
     error.statusCode === StatusCodes.NOT_FOUND
       ? error.statusCode
       : StatusCodes.INTERNAL_SERVER_ERROR;
-  return res.status(statusCode).send({ message: message });
+  return res.json(statusCode).send({ message: message });
 };
 
 module.exports = { NO_URLS_FOUND_ERROR, handleNoUrlsFoundError };

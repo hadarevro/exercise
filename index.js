@@ -22,4 +22,4 @@ const startServices = async () => {
   startServer();
 };
 
-startServices().then();
+startServices();

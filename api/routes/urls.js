@@ -20,7 +20,7 @@ router.get("/all", async (req, res) => {
   try {
     const urls = await getAllUrls();
     if (urls.length) {
-      res.send(urls).status(StatusCodes.OK);
+      res.json(urls).status(StatusCodes.OK);
     } else {
       throw new NO_URLS_FOUND_ERROR("No urls found, try adding some");
     }
@@ -34,7 +34,7 @@ router.get("/starting-by", async (req, res) => {
   try {
     const urls = await getShortUrlsStartingBy(startingBy);
     if (urls.length) {
-      return res.send(urls).status(StatusCodes.OK);
+      return res.json(urls).status(StatusCodes.OK);
     } else {
       throw new NO_URLS_FOUND_ERROR(
         `failed to get urls starting by ${startingBy}`
@@ -50,7 +50,7 @@ router.get("/contains", async (req, res) => {
   try {
     const urls = await getShortUrlsContaining(contains);
     if (urls) {
-      return res.send(urls).status(StatusCodes.OK);
+      return res.json(urls).status(StatusCodes.OK);
     } else {
       throw new NO_URLS_FOUND_ERROR(`No urls contaning ${contains}`);
     }
@@ -64,7 +64,7 @@ router.get("/not-containing", async (req, res) => {
   try {
     const urls = await getShortUrlsNotContaining(notContaining);
     if (urls) {
-      return res.send(urls).status(StatusCodes.OK);
+      return res.json(urls).status(StatusCodes.OK);
     } else {
       throw new NO_URLS_FOUND_ERROR(`No urls not containing ${notContaining} `);
     }
@@ -79,7 +79,7 @@ router.post("/add-url", async (req, res) => {
     const newUrl = await addUrl(originUrl, shortUrl);
     if (newUrl) {
       return res
-        .send(`Added ${originUrl} succesfully to db`)
+        .json(`Added ${originUrl} succesfully to db`)
         .status(StatusCodes.CREATED);
     }
     res.send("Short url already exists").status(StatusCodes.CONFLICT);
@@ -109,7 +109,7 @@ router.patch("/modify-url", async (req, res) => {
     const modifiedUrl = await modifyUrl(originUrl, shortUrl, newOriginUrl);
     if (modifiedUrl) {
       res
-        .send(`Modified ${originUrl} to ${newOriginUrl} succesfully`)
+        .json(`Modified ${originUrl} to ${newOriginUrl} succesfully`)
         .status(StatusCodes.OK);
     } else {
       throw new NO_URLS_FOUND_ERROR("No urls matching your request found");
