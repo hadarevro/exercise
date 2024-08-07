@@ -5,7 +5,6 @@ const {
   createDbConnection,
   disconnectFromDb,
 } = require("../database/connection");
-const NOT_FOUND_ERROR = require("../errors/errors");
 const { getUrlTable } = require("../models/url");
 
 let UrlTable;
@@ -82,7 +81,7 @@ const deleteUrl = async (shortUrlToDelete) => {
     return urlToDelete;
   }
   disconnectFromDb(connection);
-  return NOT_FOUND_ERROR;
+  return;
 };
 
 const deleteAllUrls = async () => {
