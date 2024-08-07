@@ -3,7 +3,7 @@ const router = require("express").Router();
 
 const {
   NO_URLS_FOUND_ERROR,
-  handleNoUrlsFound: handleNoUrlsFoundError,
+  handleNoUrlsFoundError,
 } = require("../errors/errors");
 const {
   getAllUrls,

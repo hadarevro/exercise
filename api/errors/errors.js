@@ -8,7 +8,7 @@ class NO_URLS_FOUND_ERROR extends Error {
   }
 }
 
-const handleNoUrlsFound = (res, error) => {
+const handleNoUrlsFoundError = (res, error) => {
   const message =
     error.statusCode === StatusCodes.NOT_FOUND
       ? error.message
@@ -21,4 +21,4 @@ const handleNoUrlsFound = (res, error) => {
   return res.status(statusCode).send({ message: message });
 };
 
-module.exports = { NO_URLS_FOUND_ERROR, handleNoUrlsFound };
+module.exports = { NO_URLS_FOUND_ERROR, handleNoUrlsFoundError };
