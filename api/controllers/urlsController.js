@@ -24,7 +24,7 @@ const getUrls = async (_, res) => {
       throw new NO_URLS_FOUND_ERROR("No urls found, try adding some");
     }
   } catch (error) {
-    return handleNoUrlsFoundError(res, error);
+    next(error);
   }
 };
 
@@ -40,21 +40,21 @@ const getUrlsStartingBy = async (req, res) => {
       );
     }
   } catch (error) {
-    return handleNoUrlsFoundError(res, error);
+    next(error);
   }
 };
 
-const getUrlsContaning = async (req, res) => {
+const getUrlsContaning = async (req, res, next) => {
   const { contains } = req.body;
   try {
     const urls = await getShortUrlsContaining(contains);
-    if (urls) {
+    if (urls.length) {
       return res.json(urls).status(StatusCodes.OK);
     } else {
       throw new NO_URLS_FOUND_ERROR(`No urls contaning ${contains}`);
     }
   } catch (error) {
-    return handleNoUrlsFoundError(res, error);
+    next(error);
   }
 };
 
@@ -68,7 +68,7 @@ const getUrlsNotContaining = async (req, res) => {
       throw new NO_URLS_FOUND_ERROR(`No urls not containing ${notContaining} `);
     }
   } catch (error) {
-    return handleNoUrlsFoundError(res, error);
+    next(error);
   }
 };
 
@@ -98,7 +98,7 @@ const redirectUrl = async (req, res) => {
       throw new NO_URLS_FOUND_ERROR(`The short url ${shortUrl} does not exist`);
     }
   } catch (error) {
-    return handleNoUrlsFoundError(res, error);
+    next(error);
   }
 };
 
@@ -114,7 +114,7 @@ const patchUrl = async (req, res) => {
       throw new NO_URLS_FOUND_ERROR("No urls matching your request found");
     }
   } catch (error) {
-    return handleNoUrlsFoundError(res, error);
+    next(error);
   }
 };
 
@@ -128,7 +128,7 @@ const deleteUrll = async (req, res) => {
       throw new NO_URLS_FOUND_ERROR("No urls matching your request found");
     }
   } catch (error) {
-    return handleNoUrlsFoundError(res, error);
+    next(error);
   }
 };
 

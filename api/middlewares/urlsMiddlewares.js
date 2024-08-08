@@ -1,14 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 
-class NO_URLS_FOUND_ERROR extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "NO_URLS_FOUND_ERROR";
-    this.statusCode = StatusCodes.NOT_FOUND;
-  }
-}
-
-const handleNoUrlsFoundError = (res, error) => {
+const handleNoUrlsFoundError = (error, req, res, next) => {
   const message =
     error.statusCode === StatusCodes.NOT_FOUND
       ? error.message
@@ -21,4 +13,4 @@ const handleNoUrlsFoundError = (res, error) => {
   res.status(statusCode).send({ message: message });
 };
 
-module.exports = { NO_URLS_FOUND_ERROR, handleNoUrlsFoundError };
+module.exports = handleNoUrlsFoundError;
