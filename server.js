@@ -6,6 +6,7 @@ const swaggerDocument = require("./api/specification/swagger.json");
 const urlRouter = require("./api/routes/urls");
 
 require("dotenv").config();
+
 const app = express();
 
 const listenToServer = () => {

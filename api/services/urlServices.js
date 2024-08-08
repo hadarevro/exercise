@@ -22,7 +22,7 @@ const connectToDb = async () => {
 
 const getAllUrls = async () => {
   const connection = await connectToDb();
-  urls = await UrlTable.findAll();
+  const urls = await UrlTable.findAll();
   disconnectFromDb(connection);
   return urls;
 };
