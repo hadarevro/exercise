@@ -13,60 +13,38 @@ const {
 const { NO_URLS_FOUND_ERROR } = require("../errors/errors");
 
 const getUrls = async (_, res) => {
-  try {
-    const urls = await getAllUrls();
-    if (urls.length) {
-      return res.json(urls).status(StatusCodes.OK);
-    } else {
-      throw new NO_URLS_FOUND_ERROR("No urls found, try adding some");
-    }
-  } catch (error) {
-    next(error);
+  const urls = await getAllUrls();
+  if (urls.length) {
+    return res.json(urls).status(StatusCodes.OK);
   }
+  throw new NO_URLS_FOUND_ERROR("No urls found, try adding some");
 };
 
 const getUrlsStartingBy = async (req, res) => {
   const { startingBy } = req.body;
-  try {
-    const urls = await getShortUrlsStartingBy(startingBy);
-    if (urls.length) {
-      return res.json(urls).status(StatusCodes.OK);
-    } else {
-      throw new NO_URLS_FOUND_ERROR(
-        `Failed to get urls starting by ${startingBy}`
-      );
-    }
-  } catch (error) {
-    next(error);
+  const urls = await getShortUrlsStartingBy(startingBy);
+  if (urls.length) {
+    return res.json(urls).status(StatusCodes.OK);
   }
+  throw new NO_URLS_FOUND_ERROR(`Failed to get urls starting by ${startingBy}`);
 };
 
 const getUrlsContaning = async (req, res, next) => {
   const { contains } = req.body;
-  try {
-    const urls = await getShortUrlsContaining(contains);
-    if (urls.length) {
-      return res.json(urls).status(StatusCodes.OK);
-    } else {
-      throw new NO_URLS_FOUND_ERROR(`No urls contaning ${contains}`);
-    }
-  } catch (error) {
-    next(error);
+  const urls = await getShortUrlsContaining(contains);
+  if (urls.length) {
+    return res.json(urls).status(StatusCodes.OK);
   }
+  throw new NO_URLS_FOUND_ERROR(`No urls contaning ${contains}`);
 };
 
 const getUrlsNotContaining = async (req, res) => {
   const { notContaining } = req.body;
-  try {
-    const urls = await getShortUrlsNotContaining(notContaining);
-    if (urls) {
-      return res.json(urls).status(StatusCodes.OK);
-    } else {
-      throw new NO_URLS_FOUND_ERROR(`No urls not containing ${notContaining} `);
-    }
-  } catch (error) {
-    next(error);
+  const urls = await getShortUrlsNotContaining(notContaining);
+  if (urls) {
+    return res.json(urls).status(StatusCodes.OK);
   }
+  throw new NO_URLS_FOUND_ERROR(`No urls not containing ${notContaining} `);
 };
 
 const postUrl = async (req, res) => {
@@ -87,46 +65,31 @@ const postUrl = async (req, res) => {
 
 const redirectUrl = async (req, res) => {
   const { shortUrl } = req.params;
-  try {
-    const url = await getUrlByShorterUrl(shortUrl);
-    if (url) {
-      res.redirect(url.originUrl).status(StatusCodes.PERMANENT_REDIRECT);
-    } else {
-      throw new NO_URLS_FOUND_ERROR(`The short url ${shortUrl} does not exist`);
-    }
-  } catch (error) {
-    next(error);
+  const url = await getUrlByShorterUrl(shortUrl);
+  if (url) {
+    return res.redirect(url.originUrl).status(StatusCodes.PERMANENT_REDIRECT);
   }
+  throw new NO_URLS_FOUND_ERROR(`The short url ${shortUrl} does not exist`);
 };
 
 const patchUrl = async (req, res) => {
   const { originUrl, shortUrl, newOriginUrl } = req.body;
-  try {
-    const modifiedUrl = await modifyUrl(originUrl, shortUrl, newOriginUrl);
-    if (modifiedUrl) {
-      res
-        .json(`Modified ${originUrl} to ${newOriginUrl} succesfully`)
-        .status(StatusCodes.OK);
-    } else {
-      throw new NO_URLS_FOUND_ERROR("No urls matching your request found");
-    }
-  } catch (error) {
-    next(error);
+  const modifiedUrl = await modifyUrl(originUrl, shortUrl, newOriginUrl);
+  if (modifiedUrl) {
+    return res
+      .json(`Modified ${originUrl} to ${newOriginUrl} succesfully`)
+      .status(StatusCodes.OK);
   }
+  throw new NO_URLS_FOUND_ERROR("No urls matching your request found");
 };
 
 const deleteUrl = async (req, res) => {
   const shortUrl = req.params.shortUrl;
-  try {
-    const deletedUrl = await deleteUrlFromDb(shortUrl);
-    if (!deletedUrl) {
-      res.json("Deleted url sucessfuly").status(StatusCodes.OK);
-    } else {
-      throw new NO_URLS_FOUND_ERROR("No urls matching your request found");
-    }
-  } catch (error) {
-    next(error);
+  const deletedUrl = await deleteUrlFromDb(shortUrl);
+  if (!deletedUrl) {
+    res.json("Deleted url sucessfuly").status(StatusCodes.OK);
   }
+  throw new NO_URLS_FOUND_ERROR("No urls matching your request found");
 };
 
 module.exports = {
