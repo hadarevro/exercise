@@ -1,5 +1,3 @@
-const Sequelize = require("sequelize");
-
 const { createDbConnection } = require("../database/connection");
 const config = require("../../config/config");
 
@@ -7,7 +5,7 @@ const sequelize = createDbConnection(
   config.db.databaseName,
   config.db.userName,
   config.db.databasePassword,
-  confiyg.db.host,
+  config.db.host,
   config.db.dialect || "postgres"
 );
 

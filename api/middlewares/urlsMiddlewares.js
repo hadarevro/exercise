@@ -13,4 +13,13 @@ const handleNoUrlsFoundError = (error, req, res, next) => {
   res.status(statusCode).send({ message: message });
 };
 
+const tryCatch = async (req, res, controller, next) => {
+  try {
+    await controller;
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 module.exports = handleNoUrlsFoundError;

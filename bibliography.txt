@@ -16,3 +16,5 @@ bibliography:
 14. https://www.w3schools.com/
 15. https://blog.logrocket.com/node-js-unit-testing-mocha-chai-sinon/
 16. https://sequelize.org/docs/v7/querying/operators/
+17. https://blog.logrocket.com/understanding-controllers-routes-nestjs/ 
+20. https://www.digitalocean.com/community/tutorials/nodejs-creating-your-own-express-middleware

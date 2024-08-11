@@ -33,7 +33,7 @@ const getUrlsStartingBy = async (req, res) => {
       return res.json(urls).status(StatusCodes.OK);
     } else {
       throw new NO_URLS_FOUND_ERROR(
-        `failed to get urls starting by ${startingBy}`
+        `Failed to get urls starting by ${startingBy}`
       );
     }
   } catch (error) {
