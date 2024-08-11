@@ -6,6 +6,7 @@ const {
   disconnectFromDb,
 } = require("../database/connection");
 const { getUrlTable } = require("../models/url");
+const config = require("../../config/config");
 
 let UrlTable;
 try {
@@ -15,7 +16,13 @@ try {
 }
 
 const connectToDb = async () => {
-  const connection = await createDbConnection();
+  const connection = await createDbConnection(
+    config.databaseName,
+    config.userName,
+    config.databaseName,
+    config.host,
+    config.dialect
+  );
   await checkConnectionToDb(connection);
   return connection;
 };

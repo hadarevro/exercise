@@ -5,16 +5,17 @@ const {
   disconnectFromDb,
 } = require("./api/database/connection");
 const { startServer } = require("./server");
+const config = require("./config/config");
 
 require("dotenv").config();
 
 const startServices = async () => {
   const connection = createDbConnection(
-    process.env.DATABASE_NAME,
-    process.env.USER_NAME,
-    process.env.DATABASE_PASSWORD,
-    process.env.HOST,
-    process.env.DIALECT
+    config.databaseName,
+    config.userName,
+    config.databasePassword,
+    config.host,
+    config.dialect || "postgres"
   );
   await checkConnectionToDb(connection);
   await createTableByModel(connection);

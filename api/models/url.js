@@ -1,7 +1,15 @@
 const Sequelize = require("sequelize");
-const { createDbConnection } = require("../database/connection");
 
-const sequelize = createDbConnection();
+const { createDbConnection } = require("../database/connection");
+const config = require("../../config/config");
+
+const sequelize = createDbConnection(
+  config.databaseName,
+  config.userName,
+  config.databasePassword,
+  config.host,
+  config.dialect || "postgres"
+);
 
 const getUrlTable = (tableName) => {
   const UrlTable = sequelize.define(tableName, {
