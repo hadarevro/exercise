@@ -5,15 +5,12 @@ const {
   addUrl,
   getUrlByShorterUrl,
   modifyUrl,
-  deleteUrl,
+  deleteUrlFromDb,
   getShortUrlsStartingBy,
   getShortUrlsContaining,
   getShortUrlsNotContaining,
 } = require("../services/urlServices");
-const {
-  NO_URLS_FOUND_ERROR,
-  handleNoUrlsFoundError,
-} = require("../errors/errors");
+const { NO_URLS_FOUND_ERROR } = require("../errors/errors");
 
 const getUrls = async (_, res) => {
   try {
@@ -118,10 +115,10 @@ const patchUrl = async (req, res) => {
   }
 };
 
-const deleteUrll = async (req, res) => {
+const deleteUrl = async (req, res) => {
   const shortUrl = req.params.shortUrl;
   try {
-    const deletedUrl = await deleteUrl(shortUrl);
+    const deletedUrl = await deleteUrlFromDb(shortUrl);
     if (!deletedUrl) {
       res.json("Deleted url sucessfuly").status(StatusCodes.OK);
     } else {
@@ -140,5 +137,5 @@ module.exports = {
   postUrl,
   redirectUrl,
   patchUrl,
-  deleteUrll,
+  deleteUrl,
 };

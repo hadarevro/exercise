@@ -70,7 +70,7 @@ const modifyUrl = async (
   return;
 };
 
-const deleteUrl = async (shortUrlToDelete) => {
+const deleteUrlFromDb = async (shortUrlToDelete) => {
   const connection = await connectToDb();
   const urlToDelete = UrlTable.findOne({
     where: { shortUrl: shortUrlToDelete },
@@ -132,7 +132,7 @@ module.exports = {
   addUrl,
   getUrlByShorterUrl,
   modifyUrl,
-  deleteUrl,
+  deleteUrlFromDb,
   deleteAllUrls,
   isDbContainsUrl,
   getShortUrlsStartingBy,

@@ -26,4 +26,4 @@ const startServer = () => {
   return app;
 };
 
-module.exports = startServer;
+module.exports = { startServer };

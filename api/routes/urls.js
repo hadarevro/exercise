@@ -8,7 +8,7 @@ const {
   postUrl,
   redirectUrl,
   patchUrl,
-  deleteUrll,
+  deleteUrl,
 } = require("../controllers/urlsController");
 
 router.get("/all", getUrls);
@@ -19,12 +19,12 @@ router.get("/contains", getUrlsContaning);
 
 router.get("/not-containing", getUrlsNotContaining);
 
-router.post("/add-url", postUrl);
-
 router.get("/:shortUrl", redirectUrl);
+
+router.post("/add-url", postUrl);
 
 router.patch("/modify-url", patchUrl);
 
-router.delete("/remove-url/:shortUrl", deleteUrll);
+router.delete("/delete-url/:shortUrl", deleteUrl);
 
 module.exports = router;
