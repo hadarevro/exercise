@@ -17,11 +17,11 @@ try {
 
 const connectToDb = async () => {
   const connection = await createDbConnection(
-    config.databaseName,
-    config.userName,
-    config.databaseName,
-    config.host,
-    config.dialect
+    config.db.databaseName,
+    config.db.userName,
+    config.db.databasePassword,
+    config.db.host,
+    config.db.dialect || "postgres"
   );
   await checkConnectionToDb(connection);
   return connection;

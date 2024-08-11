@@ -4,31 +4,15 @@ const { createDbConnection } = require("../database/connection");
 const config = require("../../config/config");
 
 const sequelize = createDbConnection(
-  config.databaseName,
-  config.userName,
-  config.databasePassword,
-  config.host,
-  config.dialect || "postgres"
+  config.db.databaseName,
+  config.db.userName,
+  config.db.databasePassword,
+  confiyg.db.host,
+  config.db.dialect || "postgres"
 );
 
 const getUrlTable = (tableName) => {
-  const UrlTable = sequelize.define(tableName, {
-    urlId: {
-      type: Sequelize.UUID,
-      primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
-      allowNull: false,
-    },
-    originUrl: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    shortUrl: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-  });
-
+  const UrlTable = sequelize.define(tableName, config.table);
   return UrlTable;
 };
 

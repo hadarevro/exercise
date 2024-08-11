@@ -2,7 +2,7 @@ const supertest = require("supertest");
 const { StatusCodes } = require("http-status-codes");
 
 const { mockUrl, secondMockUrl, randomUrl } = require("./data/urlDataConst");
-const startServer = require("../../server");
+const { startServer } = require("../../server");
 const {
   createDbConnection,
   checkConnectionToDb,
@@ -14,11 +14,18 @@ const {
   deleteAllUrls,
   isDbContainsUrl,
 } = require("../services/urlServices");
+const config = require("../../config/config");
 
 const app = startServer();
 
 before(async () => {
-  const connection = await createDbConnection();
+  const connection = await createDbConnection(
+    config.db.databaseName,
+    config.db.userName,
+    config.db.databasePassword,
+    config.db.host,
+    config.db.dialect || "postgres"
+  );
   await checkConnectionToDb(connection);
   await createTableByModel(connection);
   await disconnectFromDb(connection);

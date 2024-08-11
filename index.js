@@ -11,11 +11,11 @@ require("dotenv").config();
 
 const startServices = async () => {
   const connection = createDbConnection(
-    config.databaseName,
-    config.userName,
-    config.databasePassword,
-    config.host,
-    config.dialect || "postgres"
+    config.db.databaseName,
+    config.db.userName,
+    config.db.databasePassword,
+    config.db.host,
+    config.db.dialect || "postgres"
   );
   await checkConnectionToDb(connection);
   await createTableByModel(connection);
