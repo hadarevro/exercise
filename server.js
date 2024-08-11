@@ -8,14 +8,15 @@ const {
   handleNoUrlsFoundError,
   tryCatch,
 } = require("./api/middlewares/urlsMiddlewares");
+const config = require("./config/config");
 
 require("dotenv").config();
 
 const app = express();
 
 const listenToServer = () => {
-  app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port: ${process.env.PORT}`);
+  app.listen(config.db.port, () => {
+    console.log(`Server is running on port: ${config.db.port}`);
   });
 };
 

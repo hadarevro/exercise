@@ -9,12 +9,10 @@ const {
   disconnectFromDb,
   createTableByModel,
 } = require("../database/connection");
-const {
-  addUrl,
-  deleteAllUrls,
-  isDbContainsUrl,
-} = require("../services/urlServices");
 const config = require("../../config/config");
+const urlDeleteServices = require("../services/urlsServices/urlDeleteServices");
+const urlGetServices = require("../services/urlsServices/urlGetServices");
+const urlPostServices = require("../services/urlsServices/urlPostSercives");
 
 const app = startServer();
 
@@ -32,12 +30,12 @@ before(async () => {
 });
 
 afterEach(async () => {
-  await deleteAllUrls();
+  await urlDeleteServices.deleteAllUrls();
 });
 
 describe("Get requests for urls", () => {
   it("Should return all urls", () => {
-    addUrl(mockUrl.originUrl, mockUrl.shortUrl);
+    urlPostServices.addUrl(mockUrl.originUrl, mockUrl.shortUrl);
     supertest(app)
       .get("/urls/all")
       .expect(StatusCodes.OK)
@@ -57,8 +55,8 @@ describe("Get requests for urls", () => {
 
   describe("Get requests for starting by", () => {
     it("Should return all urls starting by", () => {
-      addUrl(mockUrl.originUrl, mockUrl.shortUrl);
-      addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
+      urlPostServices.addUrl(mockUrl.originUrl, mockUrl.shortUrl);
+      urlPostServices.addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
       supertest(app)
         .get("urls/starting-by")
         .send({ startingBy: "short" })
@@ -70,8 +68,8 @@ describe("Get requests for urls", () => {
     });
 
     it("Should return 404 status codes when there are no urls in db starting by", () => {
-      addUrl(mockUrl.originUrl, mockUrl.shortUrl);
-      addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
+      urlPostServices.addUrl(mockUrl.originUrl, mockUrl.shortUrl);
+      urlPostServices.addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
       supertest(app)
         .get("urls/starting-by")
         .send({ startingBy: "asdfg" })
@@ -85,8 +83,8 @@ describe("Get requests for urls", () => {
 
   describe("Get requests for contaning", () => {
     it("Should return all urls containig a given pattern", () => {
-      addUrl(mockUrl.originUrl, mockUrl.shortUrl);
-      addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
+      urlPostServices.addUrl(mockUrl.originUrl, mockUrl.shortUrl);
+      urlPostServices.addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
       supertest(app)
         .get("urls/contains")
         .send({ contains: "For" })
@@ -98,8 +96,8 @@ describe("Get requests for urls", () => {
     });
 
     it("Should return 404 code when no urls in db containig a given pattern", () => {
-      addUrl(mockUrl.originUrl, mockUrl.shortUrl);
-      addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
+      urlPostServices.addUrl(mockUrl.originUrl, mockUrl.shortUrl);
+      urlPostServices.addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
       supertest(app)
         .get("urls/contains")
         .send({ contains: "asdfghj" })
@@ -109,8 +107,8 @@ describe("Get requests for urls", () => {
 
   describe("Get requests for not contaning", () => {
     it("Should return all urls not containig a given pattern", () => {
-      addUrl(mockUrl.originUrl, mockUrl.shortUrl);
-      addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
+      urlPostServices.addUrl(mockUrl.originUrl, mockUrl.shortUrl);
+      urlPostServices.addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
       supertest(app)
         .get("urls/contains")
         .send({ notContaining: "For" })
@@ -122,8 +120,8 @@ describe("Get requests for urls", () => {
     });
 
     it("Should return 404 code when no urls in db not containig a given pattern", () => {
-      addUrl(mockUrl.originUrl, mockUrl.shortUrl);
-      addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
+      urlPostServices.addUrl(mockUrl.originUrl, mockUrl.shortUrl);
+      urlPostServices.addUrl(secondMockUrl.originUrl, secondMockUrl.shortUrl);
       supertest(app)
         .get("urls/contains")
         .send({ notContaining: "Url" })
@@ -138,7 +136,7 @@ describe("Post requests for urls", () => {
       .post("/add-url")
       .send(mockUrl)
       .expect(StatusCodes.CREATED)
-      .expect(isDbContainsUrl(mockUrl))
+      .expect(urlGetServices.isDbContainsUrl(mockUrl))
       .then((res) => {
         expect(res.body.originUrl).toEqual(mockUrl.originUrl);
         expect(res.body.shortUrl).toEqual(mockUrl.shortUrl);
@@ -146,7 +144,7 @@ describe("Post requests for urls", () => {
   });
 
   it("Should not post a url to db if already exists", () => {
-    addUrl(mockUrl.originUrl, mockUrl.shortUrl);
+    urlPostServices.addUrl(mockUrl.originUrl, mockUrl.shortUrl);
     supertest(app)
       .post("/add-url")
       .send({ mockUrl })
@@ -156,11 +154,11 @@ describe("Post requests for urls", () => {
 
 describe("Delete requests for urls", () => {
   it("Should delete a specified url from db", () => {
-    addUrl(mockUrl.originUrl, mockUrl.shortUrl);
+    urlPostServices.addUrl(mockUrl.originUrl, mockUrl.shortUrl);
     supertest(app)
       .delete(`/remove-url/:${mockUrl.shortUrl}`)
       .expect(StatusCodes.OK)
-      .expect(!isDbContainsUrl(mockUrl));
+      .expect(!urlGetServices.isDbContainsUrl(mockUrl));
   });
 
   it("Should fail to delete unexisting url", () => {
@@ -172,7 +170,7 @@ describe("Delete requests for urls", () => {
 
 describe("Patch requests for urls", () => {
   it("Should modify an existing url", () => {
-    addUrl(mockUrl.originUrl, mockUrl.shortUrl);
+    urlPostServices.addUrl(mockUrl.originUrl, mockUrl.shortUrl);
     supertest(app)
       .patch("/modify-url")
       .expect(StatusCodes.OK)

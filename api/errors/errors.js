@@ -1,24 +1,9 @@
-const { StatusCodes } = require("http-status-codes");
-
-class NO_URLS_FOUND_ERROR extends Error {
-  constructor(message) {
+class URLS_ERROR extends Error {
+  constructor(message, statusCode) {
     super(message);
-    this.name = "NO_URLS_FOUND_ERROR";
-    this.statusCode = StatusCodes.NOT_FOUND;
+    this.name = "URLS_ERROR";
+    this.statusCode = statusCode;
   }
 }
 
-const handleNoUrlsFoundError = (res, error) => {
-  const message =
-    error.statusCode === StatusCodes.NOT_FOUND
-      ? error.message
-      : "Failed to get all urls";
-  console.error(message);
-  const statusCode =
-    error.statusCode === StatusCodes.NOT_FOUND
-      ? error.statusCode
-      : StatusCodes.INTERNAL_SERVER_ERROR;
-  res.status(statusCode).send({ message: message });
-};
-
-module.exports = { NO_URLS_FOUND_ERROR, handleNoUrlsFoundError };
+module.exports = { URLS_ERROR };

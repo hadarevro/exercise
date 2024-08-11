@@ -3,7 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 const handleNoUrlsFoundError = (error, req, res, next) => {
   const message =
     error.statusCode === StatusCodes.NOT_FOUND
-      ? error.message
+      ? error.message 
       : "Failed to get all urls";
   console.error(message);
   const statusCode =

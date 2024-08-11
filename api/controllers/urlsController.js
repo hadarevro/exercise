@@ -1,95 +1,63 @@
 const { StatusCodes } = require("http-status-codes");
 
-const {
-  getAllUrls,
-  addUrl,
-  getUrlByShorterUrl,
-  modifyUrl,
-  deleteUrlFromDb,
-  getShortUrlsStartingBy,
-  getShortUrlsContaining,
-  getShortUrlsNotContaining,
-} = require("../services/urlServices");
-const { NO_URLS_FOUND_ERROR } = require("../errors/errors");
+const urlDeleteServices = require("../services/urlsServices/urlDeleteServices");
+const urlGetServices = require("../services/urlsServices/urlGetServices");
+const urlPatchServices = require("../services/urlsServices/urlPatchServices");
+const urlPostServices = require("../services/urlsServices/urlPostSercives");
 
 const getUrls = async (_, res) => {
-  const urls = await getAllUrls();
-  if (urls.length) {
-    return res.json(urls).status(StatusCodes.OK);
-  }
-  throw new NO_URLS_FOUND_ERROR("No urls found, try adding some");
+  const urls = await urlGetServices.getAllUrls();
+  return res.json(urls).status(StatusCodes.OK);
 };
 
 const getUrlsStartingBy = async (req, res) => {
   const { startingBy } = req.body;
-  const urls = await getShortUrlsStartingBy(startingBy);
-  if (urls.length) {
-    return res.json(urls).status(StatusCodes.OK);
-  }
-  throw new NO_URLS_FOUND_ERROR(`Failed to get urls starting by ${startingBy}`);
+  const urls = await urlGetServices.getShortUrlsStartingBy(startingBy);
+  return res.json(urls).status(StatusCodes.OK);
 };
 
-const getUrlsContaning = async (req, res, next) => {
+const getUrlsContaning = async (req, res) => {
   const { contains } = req.body;
-  const urls = await getShortUrlsContaining(contains);
-  if (urls.length) {
-    return res.json(urls).status(StatusCodes.OK);
-  }
-  throw new NO_URLS_FOUND_ERROR(`No urls contaning ${contains}`);
+  const urls = await urlGetServices.getShortUrlsContaining(contains);
+  return res.json(urls).status(StatusCodes.OK);
 };
 
 const getUrlsNotContaining = async (req, res) => {
   const { notContaining } = req.body;
-  const urls = await getShortUrlsNotContaining(notContaining);
-  if (urls) {
-    return res.json(urls).status(StatusCodes.OK);
-  }
-  throw new NO_URLS_FOUND_ERROR(`No urls not containing ${notContaining} `);
+  const urls = await urlGetServices.getShortUrlsNotContaining(notContaining);
+  return res.json(urls).status(StatusCodes.OK);
 };
 
 const postUrl = async (req, res) => {
   const { originUrl, shortUrl } = req.body;
-  try {
-    const newUrl = await addUrl(originUrl, shortUrl);
-    if (newUrl) {
-      return res
-        .json(`Added ${originUrl} succesfully to db`)
-        .status(StatusCodes.CREATED);
-    }
-    res.send("Short url already exists").status(StatusCodes.CONFLICT);
-  } catch (error) {
-    console.error("Failed to add new url to the db", error);
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-  }
+  const newUrl = await urlPostServices.addUrl(originUrl, shortUrl);
+  return res
+    .json(`Added ${newUrl.originUrl} succesfully to db`)
+    .status(StatusCodes.CREATED);
 };
 
 const redirectUrl = async (req, res) => {
   const { shortUrl } = req.params;
-  const url = await getUrlByShorterUrl(shortUrl);
-  if (url) {
-    return res.redirect(url.originUrl).status(StatusCodes.PERMANENT_REDIRECT);
-  }
-  throw new NO_URLS_FOUND_ERROR(`The short url ${shortUrl} does not exist`);
+  const url = await urlGetServices.getUrlByShorterUrl(shortUrl);
+  return res.redirect(url.originUrl).status(StatusCodes.PERMANENT_REDIRECT);
 };
 
 const patchUrl = async (req, res) => {
   const { originUrl, shortUrl, newOriginUrl } = req.body;
-  const modifiedUrl = await modifyUrl(originUrl, shortUrl, newOriginUrl);
-  if (modifiedUrl) {
-    return res
-      .json(`Modified ${originUrl} to ${newOriginUrl} succesfully`)
-      .status(StatusCodes.OK);
-  }
-  throw new NO_URLS_FOUND_ERROR("No urls matching your request found");
+  const modifiedUrl = await urlPatchServices.modifyUrl(
+    originUrl,
+    shortUrl,
+    newOriginUrl
+  );
+  return res
+    .json(`Modified ${originUrl} to ${modifiedUrl.originUrl} succesfully`)
+    .status(StatusCodes.OK);
 };
 
 const deleteUrl = async (req, res) => {
   const shortUrl = req.params.shortUrl;
-  const deletedUrl = await deleteUrlFromDb(shortUrl);
-  if (!deletedUrl) {
-    res.json("Deleted url sucessfuly").status(StatusCodes.OK);
-  }
-  throw new NO_URLS_FOUND_ERROR("No urls matching your request found");
+  const deletedUrl = await urlDeleteServices.deleteUrlFromDb(shortUrl);
+  res.json(`Deleted ${deletedUrl.shortUrl} sucessfuly`).status(StatusCodes.OK);
 };
 
 module.exports = {
