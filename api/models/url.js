@@ -10,8 +10,12 @@ const sequelize = createDbConnection(
 );
 
 const getUrlTable = (tableName) => {
-  const UrlTable = sequelize.define(tableName, config.table);
-  return UrlTable;
+  try {
+    const UrlTable = sequelize.define(tableName, config.model);
+    return UrlTable;
+  } catch (error) {
+    console.error("Failed to create Urls table");
+  }
 };
 
 module.exports = { getUrlTable };

@@ -3,6 +3,7 @@ const {
   createDbConnection,
 } = require("../database/connection");
 const config = require("../../config/config");
+const { getUrlTable } = require("../models/url");
 
 const connectToDb = async () => {
   const connection = await createDbConnection(
@@ -16,6 +17,14 @@ const connectToDb = async () => {
   return connection;
 };
 
+// let UrlTable;
+// try {
+const UrlTable = getUrlTable(config.db.tableName);
+// } catch (error) {
+//   console.error("Failed to create url table");
+// }
+
 module.exports = {
   connectToDb,
+  UrlTable,
 };

@@ -12,7 +12,7 @@ const config = {
     tableName: process.env.TABLE_NAME,
     host: process.env.HOST,
   },
-  table: {
+  model: {
     urlId: {
       type: Sequelize.UUID,
       primaryKey: true,
