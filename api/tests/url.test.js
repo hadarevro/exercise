@@ -40,7 +40,7 @@ describe("Get requests for urls", () => {
       .get("/urls/all")
       .expect(StatusCodes.OK)
       .then((res) => {
-        expect(res.body).toEqual(urlsData);
+        expect(res.body).toEqual(mockUrl);
       });
   });
 

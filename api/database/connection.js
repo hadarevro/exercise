@@ -9,10 +9,11 @@ const createDbConnection = (
   dbHost,
   dbDialect
 ) => {
-  return new Sequelize(databaseName, userName, databasePassword, {
+  const connection = new Sequelize(databaseName, userName, databasePassword, {
     host: dbHost,
     dialect: dbDialect,
   });
+  return connection;
 };
 
 const checkConnectionToDb = async (sequelize) => {
@@ -27,7 +28,7 @@ const checkConnectionToDb = async (sequelize) => {
 
 const disconnectFromDb = async (sequelize) => {
   try {
-    await process.on("SIGINT", () => sequelize.close());
+    sequelize.close();
     console.log("Disconnected from postgres db");
   } catch (error) {
     console.error("Failed to close the connection to db");
