@@ -6,7 +6,10 @@ const sequelize = createDbConnection(
   config.db.userName,
   config.db.databasePassword,
   config.db.host,
-  config.db.dialect || "postgres"
+  config.db.dialect || "postgres",
+  config.pool.max,
+  config.pool.min,
+  config.pool.idle
 );
 
 const getUrlTable = (tableName) => {

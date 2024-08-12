@@ -1,10 +1,11 @@
 const { StatusCodes } = require("http-status-codes");
+const NOT_FOUND_ERROR_MESSAGE = require("../errors/errors");
 
 const handleNoUrlsFoundError = (error, req, res, next) => {
   const message =
-    error.statusCode !== StatusCodes.NOT_FOUND
+    error.statusCode === StatusCodes.NOT_FOUND
       ? error.message
-      : "Failed to get all urls";
+      : NOT_FOUND_ERROR_MESSAGE;
   console.error(message);
   const statusCode =
     error.statusCode !== null

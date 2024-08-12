@@ -30,7 +30,6 @@ const checkConnectionToDb = async (sequelize) => {
     console.log("Connected to PostgresSQL database");
   } catch (error) {
     console.error("Connection to PostgresSQL database failed", error);
-    throw error;
   }
 };
 
