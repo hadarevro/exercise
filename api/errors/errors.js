@@ -6,4 +6,6 @@ class URLS_ERROR extends Error {
   }
 }
 
-module.exports = { URLS_ERROR };
+const NOT_FOUND_ERROR_MESSAGE = "No urls matching your request found";
+
+module.exports = { URLS_ERROR, NOT_FOUND_ERROR_MESSAGE };

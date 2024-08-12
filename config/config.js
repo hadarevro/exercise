@@ -28,6 +28,11 @@ const config = {
       allowNull: false,
     },
   },
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 20000,
+  },
 };
 
 module.exports = config;

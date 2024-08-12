@@ -1,20 +1,26 @@
-const { dbConnection } = require("./api/database/connection");
+const {
+  checkConnectionToDb,
+  createDbConnection,
+  createTableByModel,
+} = require("./api/database/connection");
 const { startServer } = require("./server");
 const config = require("./config/config");
 
 require("dotenv").config();
 
 const startServices = async () => {
-  const connection = dbConnection.createDbConnection(
+  const connection = createDbConnection(
     config.db.databaseName,
     config.db.userName,
     config.db.databasePassword,
     config.db.host,
-    config.db.dialect || "postgres"
+    config.db.dialect || "postgres",
+    config.pool.max,
+    config.pool.min,
+    config.pool.idle
   );
-  await dbConnection.checkConnectionToDb(connection);
-  await dbConnection.createTableByModel(connection);
-  await dbConnection.disconnectFromDb(connection);
+  await checkConnectionToDb(connection);
+  await createTableByModel(connection);
   startServer();
 };
 

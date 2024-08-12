@@ -7,11 +7,19 @@ const createDbConnection = (
   userName,
   databasePassword,
   dbHost,
-  dbDialect
+  dbDialect,
+  poolMax,
+  poolMin,
+  poolIdle
 ) => {
   const connection = new Sequelize(databaseName, userName, databasePassword, {
     host: dbHost,
     dialect: dbDialect,
+    pool: {
+      max: poolMax,
+      min: poolMin,
+      idle: poolIdle,
+    },
   });
   return connection;
 };
@@ -22,16 +30,6 @@ const checkConnectionToDb = async (sequelize) => {
     console.log("Connected to PostgresSQL database");
   } catch (error) {
     console.error("Connection to PostgresSQL database failed", error);
-    throw error;
-  }
-};
-
-const disconnectFromDb = async (sequelize) => {
-  try {
-    sequelize.close();
-    console.log("Disconnected from postgres db");
-  } catch (error) {
-    console.error("Failed to close the connection to db");
     throw error;
   }
 };
@@ -49,5 +47,4 @@ module.exports = {
   checkConnectionToDb,
   createDbConnection,
   createTableByModel,
-  disconnectFromDb,
 };
