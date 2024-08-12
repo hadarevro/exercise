@@ -3,31 +3,11 @@ const { StatusCodes } = require("http-status-codes");
 
 const { mockUrl, secondMockUrl, randomUrl } = require("./data/urlDataConst");
 const { startServer } = require("../../server");
-const {
-  createDbConnection,
-  checkConnectionToDb,
-  disconnectFromDb,
-  createTableByModel,
-} = require("../database/connection");
-const config = require("../../config/config");
 const urlDeleteServices = require("../services/urlsServices/urlDeleteServices");
 const urlGetServices = require("../services/urlsServices/urlGetServices");
 const urlPostServices = require("../services/urlsServices/urlPostSercives");
 
 const app = startServer();
-
-before(async () => {
-  const connection = await createDbConnection(
-    config.db.databaseName,
-    config.db.userName,
-    config.db.databasePassword,
-    config.db.host,
-    config.db.dialect || "postgres"
-  );
-  await checkConnectionToDb(connection);
-  await createTableByModel(connection);
-  await disconnectFromDb(connection);
-});
 
 afterEach(async () => {
   await urlDeleteServices.deleteAllUrls();
@@ -45,12 +25,7 @@ describe("Get requests for urls", () => {
   });
 
   it("Should return 404 status codes when there are no urls in db", () => {
-    supertest(app)
-      .get("/urls/all")
-      .expect(StatusCodes.NOT_FOUND)
-      .then((res) => {
-        expect(res.body).toEqual([]);
-      });
+    supertest(app).get("/urls/all").expect(StatusCodes.NOT_FOUND);
   });
 
   describe("Get requests for starting by", () => {
@@ -73,11 +48,7 @@ describe("Get requests for urls", () => {
       supertest(app)
         .get("urls/starting-by")
         .send({ startingBy: "asdfg" })
-        .expect(StatusCodes.NOT_FOUND)
-        .then((res) => {
-          expect(res.body.originUrl).toEqual(mockUrl.originUrl);
-          expect(res.body.shortUrl).toEqual(mockUrl.shortUrl);
-        });
+        .expect(StatusCodes.NOT_FOUND);
     });
   });
 

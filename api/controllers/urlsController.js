@@ -5,30 +5,30 @@ const urlGetServices = require("../services/urlsServices/urlGetServices");
 const urlPatchServices = require("../services/urlsServices/urlPatchServices");
 const urlPostServices = require("../services/urlsServices/urlPostSercives");
 
-const getUrls = async (_, res) => {
+module.exports.getUrls = async (_, res) => {
   const urls = await urlGetServices.getAllUrls();
   return res.json(urls).status(StatusCodes.OK);
 };
 
-const getUrlsStartingBy = async (req, res) => {
+module.exports.getUrlsStartingBy = async (req, res) => {
   const { startingBy } = req.body;
   const urls = await urlGetServices.getShortUrlsStartingBy(startingBy);
   return res.json(urls).status(StatusCodes.OK);
 };
 
-const getUrlsContaning = async (req, res) => {
+module.exports.getUrlsContaning = async (req, res) => {
   const { contains } = req.body;
   const urls = await urlGetServices.getShortUrlsContaining(contains);
   return res.json(urls).status(StatusCodes.OK);
 };
 
-const getUrlsNotContaining = async (req, res) => {
+module.exports.getUrlsNotContaining = async (req, res) => {
   const { notContaining } = req.body;
   const urls = await urlGetServices.getShortUrlsNotContaining(notContaining);
   return res.json(urls).status(StatusCodes.OK);
 };
 
-const postUrl = async (req, res) => {
+module.exports.postUrl = async (req, res) => {
   const { originUrl, shortUrl } = req.body;
   const newUrl = await urlPostServices.addUrl(originUrl, shortUrl);
   return res
@@ -36,13 +36,13 @@ const postUrl = async (req, res) => {
     .status(StatusCodes.CREATED);
 };
 
-const redirectUrl = async (req, res) => {
+module.exports.redirectUrl = async (req, res) => {
   const { shortUrl } = req.params;
   const url = await urlGetServices.getUrlByShorterUrl(shortUrl);
   return res.redirect(url.originUrl).status(StatusCodes.PERMANENT_REDIRECT);
 };
 
-const patchUrl = async (req, res) => {
+module.exports.patchUrl = async (req, res) => {
   const { originUrl, shortUrl, newOriginUrl } = req.body;
   const modifiedUrl = await urlPatchServices.modifyUrl(
     originUrl,
@@ -54,19 +54,8 @@ const patchUrl = async (req, res) => {
     .status(StatusCodes.OK);
 };
 
-const deleteUrl = async (req, res) => {
+module.exports.deleteUrl = async (req, res) => {
   const shortUrl = req.params.shortUrl;
   const deletedUrl = await urlDeleteServices.deleteUrlFromDb(shortUrl);
   res.json(`Deleted ${deletedUrl.shortUrl} sucessfuly`).status(StatusCodes.OK);
-};
-
-module.exports = {
-  getUrls,
-  getUrlsStartingBy,
-  getUrlsContaning,
-  getUrlsNotContaining,
-  postUrl,
-  redirectUrl,
-  patchUrl,
-  deleteUrl,
 };

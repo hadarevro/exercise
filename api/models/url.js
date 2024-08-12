@@ -14,7 +14,7 @@ const getUrlTable = (tableName) => {
     const UrlTable = sequelize.define(tableName, config.model);
     return UrlTable;
   } catch (error) {
-    console.error("Failed to create Urls table");
+    console.error("Failed to create Urls table", error);
   }
 };
 
