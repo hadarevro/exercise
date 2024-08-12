@@ -17,12 +17,7 @@ const connectToDb = async () => {
   return connection;
 };
 
-// let UrlTable;
-// try {
 const UrlTable = getUrlTable(config.db.tableName);
-// } catch (error) {
-//   console.error("Failed to create url table");
-// }
 
 module.exports = {
   connectToDb,

@@ -18,3 +18,7 @@ bibliography:
 16. https://sequelize.org/docs/v7/querying/operators/
 17. https://blog.logrocket.com/understanding-controllers-routes-nestjs/ 
 20. https://www.digitalocean.com/community/tutorials/nodejs-creating-your-own-express-middleware
+21. https://medium.com/deno-the-complete-reference/node-js-8-best-practices-for-express-middlewares-bb5825ec0844
+22. https://blog.logrocket.com/node-js-project-architecture-best-practices/
+23. https://medium.com/@vickypaiyaa/power-of-advanced-error-handling-techniques-in-node-js-44d53cda3c61
+24. https://medium.com/@adarsh-d/roadmap-for-learning-node-js-fbd91d634035

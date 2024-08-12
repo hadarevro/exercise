@@ -1,5 +1,6 @@
 const router = require("express").Router();
 
+const { tryCatch } = require("../middlewares/urlsMiddlewares");
 const {
   getUrls,
   getUrlsStartingBy,
@@ -11,20 +12,20 @@ const {
   deleteUrl,
 } = require("../controllers/urlsController");
 
-router.get("/all", getUrls);
+router.get("/all", tryCatch(getUrls));
 
-router.get("/starting-by", getUrlsStartingBy);
+router.get("/starting-by", tryCatch(getUrlsStartingBy));
 
-router.get("/contains", getUrlsContaning);
+router.get("/contains", tryCatch(getUrlsContaning));
 
-router.get("/not-containing", getUrlsNotContaining);
+router.get("/not-containing", tryCatch(getUrlsNotContaining));
 
-router.get("/:shortUrl", redirectUrl);
+router.get("/:shortUrl", tryCatch(redirectUrl));
 
-router.post("/add-url", postUrl);
+router.post("/add-url", tryCatch(postUrl));
 
-router.patch("/modify-url", patchUrl);
+router.patch("/modify-url", tryCatch(patchUrl));
 
-router.delete("/delete-url/:shortUrl", deleteUrl);
+router.delete("/delete-url/:shortUrl", tryCatch(deleteUrl));
 
 module.exports = router;

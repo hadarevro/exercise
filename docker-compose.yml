@@ -36,7 +36,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - PORT=3000
+      - PORT=8080
       - POSTGRES_DB=example-database
       - POSTGRES_USER=example-database
       - POSTGRES_PASSWORD=mysecretpassword
